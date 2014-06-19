@@ -2,7 +2,7 @@
 
 [![Build Status](https://secure.travis-ci.org/DefinitelyTyped/definition-tester.svg?branch=master)](http://travis-ci.org/DefinitelyTyped/definition-tester) [![NPM version](https://badge.fury.io/js/definition-tester.svg)](http://badge.fury.io/js/definition-tester) [![Dependency Status](https://david-dm.org/DefinitelyTyped/definition-tester.svg)](https://david-dm.org/DefinitelyTyped/definition-tester) [![devDependency Status](https://david-dm.org/DefinitelyTyped/definition-tester/dev-status.svg)](https://david-dm.org/DefinitelyTyped/definition-tester#info=devDependencies)
 
-> DefinitelyTyped repository tester
+> DefinitelyTyped repository testing infrastructure
 
 Testing infrastructure for the [DefinitelyTyped](https://github.com/borisyankov/DefinitelyTyped) repository.
 

@@ -2,7 +2,7 @@
   "private": true,
   "name": "definition-tester",
   "version": "0.0.1",
-  "description": "DefinitelyTyped repository tester",
+  "description": "DefinitelyTyped repository testing infrastructure",
   "keywords": [
     "typescript",
     "definition",
