@@ -8,7 +8,7 @@ Testing infrastructure for the [DefinitelyTyped](https://github.com/borisyankov/
 
 :warning: Under construction :sunglasses:
 
-Currently only usable a dependency of DT repo.
+Currently mostly usable as a dependency of DT repo.
 
 ## Build
 
