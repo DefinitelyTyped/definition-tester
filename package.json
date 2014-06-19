@@ -1,0 +1,63 @@
+{
+  "private": true,
+  "name": "definition-tester",
+  "version": "0.0.1",
+  "description": "DefinitelyTyped repository tester",
+  "keywords": [
+    "typescript",
+    "definition",
+    "repo",
+    "tester"
+  ],
+  "homepage": "https://github.com/DefinitelyTyped/definition-tester",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DefinitelyTyped/definition-tester.git"
+  },
+  "author": {
+    "name": "Bart van der Schoor",
+    "url": "https://github.com/Bartvds"
+  },
+  "licenses": [
+    {
+      "type": "MIT",
+      "url": "https://raw.github.com/DefinitelyTyped/definition-tester/master/LICENSE-MIT"
+    }
+  ],
+  "bugs": {
+    "url": "https://github.com/DefinitelyTyped/definition-tester/issues"
+  },
+  "engines": {
+    "node": ">= 0.10.0"
+  },
+  "scripts": {
+    "prepublish": "grunt prepublish",
+    "build": "grunt build",
+    "test": "grunt test"
+  },
+  "main": "./index.js",
+  "dependencies": {
+    "bluebird": "~1.0.7",
+    "definition-header": "^0.1.0",
+    "findup-sync": "~0.1.3",
+    "git-wrapper": "~0.1.1",
+    "glob": "~3.2.9",
+    "lazy.js": "~0.3.2",
+    "optimist": "~0.6.1",
+    "rimraf": "~2.2.8",
+    "source-map-support": "~0.2.5",
+    "tslint": "^0.4.9",
+    "typescript": "^1.0.1"
+  },
+  "devDependencies": {
+    "grunt": "^0.4.5",
+    "grunt-contrib-clean": "^0.5.0",
+    "grunt-contrib-jshint": "^0.10.0",
+    "grunt-ts": "^1.11.2",
+    "grunt-ts-clean": "^0.1.1",
+    "grunt-tslint": "^0.4.1",
+    "jshint-path-reporter": "^0.1.3",
+    "mocha-unfunk-reporter": "^0.4.0",
+    "tslint-path-formatter": "^0.1.1"
+  }
+}
