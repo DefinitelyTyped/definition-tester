@@ -43,7 +43,7 @@ class TsdparamsSuite extends TestSuiteBase {
 
 	public filterTargetFiles(files: File[]): Promise<File[]> {
 		return Promise.filter(files, (file) => {
-			return util.fileExists(file.filePathWithName + '.tscparams');
+			return util.fileExists(file.fullPath + '.tscparams');
 		});
 	}
 
@@ -51,7 +51,7 @@ class TsdparamsSuite extends TestSuiteBase {
 		this.print.clearCurrentLine().out(targetFile.filePathWithName);
 
 		return this.queue.run(new TscTest(this, targetFile, {
-			tscPath: this.options.tscPath,
+			tscVersion: this.options.tscVersion,
 			useTscParams: false,
 			checkNoImplicitAny: true
 		})).then((result) => {

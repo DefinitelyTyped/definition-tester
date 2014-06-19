@@ -33,7 +33,6 @@ import HeaderSuite = require('../header/HeaderSuite');
 // The main class to kick things off
 /////////////////////////////////
 class TestRunner {
-	public dtPath: string;
 	public options: ITestOptions;
 
 	private timer: Timer;
@@ -43,16 +42,14 @@ class TestRunner {
 	public index: FileIndex;
 	public print: Print;
 
-	constructor(dtPath: string, options?: ITestOptions) {
-		this.dtPath = dtPath;
-
+	constructor(options?: ITestOptions) {
 		this.options = options;
 		this.options.findNotRequiredTscparams = !!this.options.findNotRequiredTscparams;
 
-		this.index = new FileIndex(this.dtPath, this.options);
-		this.changes = new GitChanges(dtPath);
+		this.index = new FileIndex(this.options);
+		this.changes = new GitChanges(this.options.dtPath);
 
-		this.print = new Print(this.options.tscPath);
+		this.print = new Print(this.options.tscVersion);
 	}
 
 	public addSuite(suite: ITestSuite): void {
@@ -80,7 +77,10 @@ class TestRunner {
 
 		// only includes .d.ts or -tests.ts or -test.ts or .ts
 		return this.index.readIndex().then(() => {
-			return this.changes.readChanges();
+			return this.changes.readChanges().catch((err) => {
+				console.dir(err.message);
+				return [];
+			});
 		}).then((changes: string[]) => {
 			this.print.printAllChanges(changes);
 
@@ -134,8 +134,8 @@ class TestRunner {
 
 			var syntaxChecking = new SyntaxSuite(this.options);
 			var testEval = new EvalSuite(this.options);
-			var linter = new TSLintSuite(this.options, this.dtPath, path.join(this.dtPath, 'tslint.json'));
-			var headers = new HeaderSuite(this.options, this.dtPath);
+			var linter = new TSLintSuite(this.options);
+			var headers = new HeaderSuite(this.options);
 
 			var filters = [];
 			// don't mess with this ordering

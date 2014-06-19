@@ -1,5 +1,8 @@
 interface ITestOptions {
-	tscPath: string;
+	dtPath: string;
+	testerPath: string;
+	tscVersion: string;
+	tslintConfig: string;
 	concurrent?: number;
 	testChanges?: boolean;
 	lintChanges?: boolean;

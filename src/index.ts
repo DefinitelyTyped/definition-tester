@@ -2,12 +2,10 @@
 
 import os = require('os');
 import path = require('path');
-import assert = require('assert');
 
 import sms = require('source-map-support');
-import Lazy = require('lazy.js');
-import Promise = require('bluebird');
 import opt = require('optimist');
+import Promise = require('bluebird');
 import findup = require('findup-sync');
 
 import Const = require('./Const');
@@ -17,7 +15,7 @@ interface PackageJSON {
 	scripts: {[key: string]: string};
 }
 
-var pgkPath = findup('package.json');
+var pkgPath = findup('package.json');
 
 var optimist = opt(process.argv);
 optimist.default('try-without-tscparams', false);
@@ -29,7 +27,7 @@ optimist.default('lint-changes', false);
 optimist.default('skip-tests', false);
 optimist.default('print-files', false);
 optimist.default('print-refmap', false);
-optimist.default('path', path.resolve(path.dirname(pgkPath), '..', '..'));
+optimist.default('path', path.resolve(path.dirname(pkgPath), '..', '..'));
 
 optimist.string('path');
 optimist.boolean('help');
@@ -39,21 +37,23 @@ optimist.alias('h', 'help');
 
 var argv: any = optimist.argv;
 
-var dtPath = argv['path'];
-var cpuCores = os.cpus().length;
-
 if (argv['debug']) {
 	sms.install();
+	Promise.longStackTraces();
 }
+
+var dtPath = path.resolve(argv['path']);
+var cpuCores = os.cpus().length;
+var testerPath = path.dirname(pkgPath);
 
 if (argv.help) {
 	optimist.help();
 
-	var pkg: PackageJSON = require(pgkPath);
+	var pkg: PackageJSON = require(pkgPath);
 
 	console.log('Scripts:');
 	console.log('');
-	Lazy(pkg.scripts).keys().each((key) => {
+	Object.keys(pkg.scripts).forEach((key) => {
 		console.log('   $ npm run ' + key);
 	});
 	process.exit(0);
@@ -61,9 +61,12 @@ if (argv.help) {
 
 var testFull = (process.env['TRAVIS_BRANCH'] ? /\w\/full$/.test(process.env['TRAVIS_BRANCH']) : false);
 
-new TestRunner(dtPath, {
+new TestRunner({
+	testerPath: testerPath,
+	dtPath: dtPath,
 	concurrent: (argv['single-thread'] ? 1 : Math.round(cpuCores * .75)),
-	tscPath: require.resolve('typescript'),
+	tscVersion: argv['tsc-version'],
+	tslintConfig: path.join(testerPath, 'conf', 'tslint.json'),
 	testChanges: (testFull ? false : argv['test-changes']), // allow magic branch
 	lintChanges: (testFull ? false : argv['lint-changes']), // allow magic branch
 	skipTests: argv['skip-tests'],

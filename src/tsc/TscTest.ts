@@ -25,7 +25,7 @@ class TscTest implements ITest {
 	}
 
 	public run(): Promise<TestResult> {
-		return Tsc.run(this.tsfile.filePathWithName, this.options).then((execResult: exec.ExecResult) => {
+		return Tsc.run(this.tsfile.fullPath, this.options).then((execResult: exec.ExecResult) => {
 			var testResult = new TestResult();
 			testResult.hostedBy = this.suite;
 			testResult.targetFile = this.tsfile;

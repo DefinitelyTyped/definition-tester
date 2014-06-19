@@ -22,7 +22,6 @@ var tsExp = /\.ts$/;
 /////////////////////////////////
 class FileIndex {
 
-	dtPath: string;
 	files: File[];
 	fileMap: IFileDict;
 	refMap: IFileArrDict;
@@ -31,13 +30,13 @@ class FileIndex {
 	removed: IFileDict;
 	missing: IFileArrDict;
 
-	constructor(dtPath: string, options: ITestOptions) {
-		this.dtPath = dtPath;
+	constructor(options: ITestOptions) {
 		this.options = options;
 	}
 
-	public checkAcceptFile(fileName: string): boolean {
+	private checkAcceptFile(fileName: string): boolean {
 		var ok = tsExp.test(fileName);
+		ok = ok && fileName.indexOf('_infrastructure/') < 0;
 		ok = ok && fileName.indexOf('node_modules/') < 0;
 		ok = ok && /^[a-z]/i.test(fileName);
 		return ok;
@@ -65,12 +64,12 @@ class FileIndex {
 		this.fileMap = Object.create(null);
 
 		return Promise.promisify(glob).call(glob, '**/*.ts', {
-			cwd: this.dtPath
+			cwd: this.options.dtPath
 		}).then((filesNames: string[]) => {
 			this.files = Lazy(filesNames).filter((fileName) => {
 				return this.checkAcceptFile(fileName);
 			}).map((fileName: string) => {
-				var file = new File(this.dtPath, fileName);
+				var file = new File(this.options.dtPath, fileName);
 				this.fileMap[file.fullPath] = file;
 				return file;
 			}).toArray();
@@ -86,12 +85,12 @@ class FileIndex {
 			Lazy(changes).filter((full) => {
 				return this.checkAcceptFile(full);
 			}).uniq().each((local) => {
-				var full = path.resolve(this.dtPath, local);
+				var full = path.resolve(this.options.dtPath, local);
 				var file = this.getFile(full);
 				if (!file) {
 					// TODO figure out what to do here
 					// what does it mean? deleted?ss
-					file = new File(this.dtPath, local);
+					file = new File(this.options.dtPath, local);
 					this.setFile(file);
 					this.removed[full] = file;
 				}
@@ -112,6 +111,7 @@ class FileIndex {
 	private getMissingReferences(): Promise<void> {
 		return Promise.attempt(() => {
 			this.missing = Object.create(null);
+
 			Lazy(this.removed).keys().each((removed) => {
 				if (removed in this.refMap) {
 					this.missing[removed] = this.refMap[removed];
@@ -130,7 +130,7 @@ class FileIndex {
 					resolve(null);
 					return;
 				}
-				// queue paralel
+				// queue parallel
 				while (queue.length > 0 && active.length < max) {
 					var file = queue.pop();
 					active.push(file);
@@ -151,20 +151,24 @@ class FileIndex {
 
 			Lazy(files).each((file) => {
 				Lazy(file.references).each((ref) => {
-					if (ref.fullPath in this.refMap) {
-						this.refMap[ref.fullPath].push(file);
-					}
-					else {
-						this.refMap[ref.fullPath] = [file];
-					}
+					this.addToRefMap(ref.fullPath, file);
 				});
 			});
 		});
 	}
 
+	private addToRefMap(fullPath: string, file: File): void {
+		if (fullPath in this.refMap) {
+			this.refMap[fullPath].push(file);
+		}
+		else {
+			this.refMap[fullPath] = [file];
+		}
+	}
+
 	// TODO replace with a stream?
 	private parseFile(file: File): Promise<File> {
-		return util.readFile(file.filePathWithName).then((content: string) => {
+		return util.readFile(file.fullPath).then((content: string) => {
 			file.references = Lazy(util.extractReferenceTags(content)).map((ref: string) => {
 				return path.resolve(path.dirname(file.fullPath), ref);
 			}).reduce((memo: File[], ref: string) => {
@@ -172,7 +176,8 @@ class FileIndex {
 					memo.push(this.fileMap[ref]);
 				}
 				else {
-					console.log('not mapped? -> ' + ref);
+					console.log(' not mapped? -> ' + ref);
+					// console.log(Object.keys(this.fileMap).join('\n'));
 				}
 				return memo;
 			}, []);

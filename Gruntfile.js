@@ -32,6 +32,9 @@ module.exports = function (grunt) {
 		},
 		ts_clean: {
 			dist: {
+				options: {
+					verbose: false
+				},
 				src: ['dist/**/*', '!dist/index.d.ts'],
 				dot: true
 			}
@@ -95,13 +98,13 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('prepublish', [
 		'build',
+		'ts_clean:dist'
 	]);
 
 	grunt.registerTask('sweep', [
 		'clean:cruft',
-        'clean:tmp',
-        'clean:test',
-		'ts_clean:dist'
+		'clean:tmp',
+		'clean:test'
 	]);
 
 	grunt.registerTask('dev', ['ts:typings']);

@@ -20,11 +20,8 @@ var isDef = /^[\w\.-]+[\\\/][\w\.-]+\.d\.ts$/;
 /////////////////////////////////
 class HeaderSuite extends TestSuiteBase {
 
-	dtPath: string;
-
-	constructor(options: ITestOptions, dtPath: string) {
+	constructor(options: ITestOptions) {
 		super(options, 'Header format', 'Invalid header');
-		this.dtPath = dtPath;
 	}
 
 	public filterTargetFiles(files: File[]): Promise<File[]> {
@@ -34,9 +31,7 @@ class HeaderSuite extends TestSuiteBase {
 	}
 
 	public runTest(targetFile: File): Promise<TestResult> {
-		console.log(targetFile.filePathWithName);
-
-		return util.readFile(path.join(this.dtPath, targetFile.filePathWithName)).then((content) => {
+		return util.readFile(targetFile.fullPath).then((content) => {
 			var testResult = new TestResult();
 			testResult.hostedBy = this;
 			testResult.targetFile = targetFile;

@@ -2,7 +2,9 @@
 
 'use strict';
 
+import path = require('path');
 import Promise = require('bluebird');
+import findup = require('findup-sync');
 
 import Const = require('../Const');
 
@@ -12,31 +14,31 @@ import util = require('../util/util');
 import ITscExecOptions = require('./ITscExecOptions');
 
 class Tsc {
+
 	public static run(tsfile: string, options: ITscExecOptions): Promise<exec.ExecResult> {
+		var tscPath: string = path.join(options.tscPath, (options.tscVersion || Const.DEFAULT_TSC_VERSION), 'tsc.js');
 
-		return Promise.attempt<boolean>(() => {
-			options = options || {};
+		if (typeof options.checkNoImplicitAny === 'undefined') {
+			options.checkNoImplicitAny = true;
+		}
+		if (typeof options.useTscParams === 'undefined') {
+			options.useTscParams = true;
+		}
 
-			if (typeof options.checkNoImplicitAny === 'undefined') {
-				options.checkNoImplicitAny = true;
-			}
-			if (typeof options.useTscParams === 'undefined') {
-				options.useTscParams = true;
-			}
-			return util.fileExists(tsfile);
-		}).then((exists) => {
-			if (!exists) {
+		return Promise.all([
+			util.fileExists(tsfile),
+			util.fileExists(tscPath)
+		]).spread((tsfileExists: boolean, tscPathExists: boolean) => {
+			if (!tsfileExists) {
 				throw new Error(tsfile + ' does not exist');
 			}
-			return util.fileExists(options.tscPath);
-		}).then((exists) => {
-			if (!exists) {
-				throw new Error(options.tscPath + ' does not exist');
+			if (!tscPathExists) {
+				throw new Error(tscPath + ' does not exist');
 			}
 			return util.fileExists(tsfile + '.tscparams');
-		}).then(exists => {
-			var command = 'node ' + options.tscPath + ' --module commonjs';
-			if (options.useTscParams && exists) {
+		}).then(tsParamsExist => {
+			var command = 'node ' + tscPath + ' --module commonjs ';
+			if (options.useTscParams && tsParamsExist) {
 				command += '@' + tsfile + '.tscparams';
 			}
 			else if (options.checkNoImplicitAny) {
@@ -47,4 +49,4 @@ class Tsc {
 	}
 }
 
-export  = Tsc;
+export = Tsc;

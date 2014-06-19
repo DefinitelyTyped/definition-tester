@@ -1,5 +1,6 @@
 'use strict';
 
+import path = require('path');
 import Promise = require('bluebird');
 
 import ITestSuite = require('./ITestSuite');
@@ -58,7 +59,8 @@ class TestSuiteBase implements ITestSuite {
 
 	public runTest(targetFile: File): Promise<TestResult> {
 		return this.queue.run(new TscTest(this, targetFile, {
-			tscPath: this.options.tscPath
+			tscPath: path.join(this.options.dtPath, '_infrastructure', 'tests', 'typescript'),
+			tscVersion: this.options.tscVersion
 		})).then((result) => {
 			this.testResults.push(result);
 			return result;

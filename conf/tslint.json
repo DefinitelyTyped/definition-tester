@@ -1,0 +1,47 @@
+{
+    "rules": {
+        "ban": [false],
+        "class-name": false,
+        "eofline": false,
+        "indent": [true, 4],
+        "interface-name": false,
+        "jsdoc-format": false,
+        "max-line-length": [false, 140],
+        "no-any": false,
+        "no-construct": true,
+        "no-duplicate-key": false,
+        "no-duplicate-variable": false,
+        "no-empty": false,
+        "no-string-literal": false,
+        "no-trailing-comma": false,
+        "no-trailing-whitespace": false,
+        "no-use-before-declare": false,
+        "no-var-requires": false,
+        "one-line": [false,
+            "check-whitespace"
+        ],
+        "quotemark": [false, "double"],
+        "semicolon": false,
+        "typedef": [false,
+            "callSignature",
+            "indexSignature",
+            "parameter",
+            "propertySignature",
+            "variableDeclarator"
+        ],
+        "typedef-whitespace": [false,
+            ["callSignature", "noSpace"],
+            ["indexSignature", "space"]
+        ],
+        "variable-name": [
+            false,
+            "allow-leading-underscore"
+        ],
+        "whitespace": [false,
+            "check-decl",
+            "check-operator",
+            "check-separator",
+            "check-type"
+        ]
+    }
+}

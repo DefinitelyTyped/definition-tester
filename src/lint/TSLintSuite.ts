@@ -19,14 +19,8 @@ var endDts = /\w\.d\.ts$/;
 // Compile with *-tests.ts
 /////////////////////////////////
 class TSLintSuite extends TestSuiteBase {
-
-	configFile: string;
-	dtPath: string;
-
-	constructor(options: ITestOptions, dtPath: string, configFile: string) {
+	constructor(options: ITestOptions) {
 		super(options, 'Linting', 'Found some lint');
-		this.dtPath = dtPath;
-		this.configFile = configFile;
 	}
 
 	public filterTargetFiles(files: File[]): Promise<File[]> {
@@ -36,7 +30,7 @@ class TSLintSuite extends TestSuiteBase {
 	}
 
 	public runTest(targetFile: File): Promise<TestResult> {
-		return this.queue.run(new TSLintTest(this, targetFile, this.configFile)).then((result) => {
+		return this.queue.run(new TSLintTest(this, targetFile, this.options.tslintConfig)).then((result) => {
 			this.testResults.push(result);
 			return result;
 		});

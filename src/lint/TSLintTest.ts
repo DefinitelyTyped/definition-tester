@@ -30,12 +30,12 @@ class TSLintTest implements ITest {
 	}
 
 	public run(): Promise<TestResult> {
-		var bin = path.resolve(this.suite.dtPath, 'node_modules', 'tslint', 'bin', 'tslint-cli.js');
+		var bin = path.resolve(this.suite.options.testerPath, 'node_modules', 'tslint', 'bin', 'tslint-cli.js');
 		var args = [
 			bin,
 			'--file', this.tsfile.filePathWithName,
 			'--config', this.configFile,
-			'--format', path.resolve(this.suite.dtPath, '_infrastructure', 'tests', 'build', 'lint', 'Formatter')
+			'--format', path.resolve(this.suite.options.testerPath, 'dist', 'lint', 'Formatter')
 		];
 		return exec.exec('node', args).then((execResult: exec.ExecResult) => {
 			var testResult = new TestResult();
