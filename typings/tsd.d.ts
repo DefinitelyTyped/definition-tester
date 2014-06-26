@@ -10,3 +10,4 @@
 /// <reference path="minimatch/minimatch.d.ts" />
 /// <reference path="tslint/tslint.d.ts" />
 /// <reference path="../node_modules/definition-header/dist/index.d.ts" />
+/// <reference path="chalk/chalk.d.ts" />
