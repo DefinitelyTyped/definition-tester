@@ -3,17 +3,12 @@
 import os = require('os');
 import path = require('path');
 
-import sms = require('source-map-support');
 import opt = require('optimist');
 import Promise = require('bluebird');
 import findup = require('findup-sync');
 
 import Const = require('./Const');
 import TestRunner = require('./test/TestRunner');
-
-interface PackageJSON {
-	scripts: {[key: string]: string};
-}
 
 var testerPkgPath = findup('package.json', {cwd: process.cwd()});
 
@@ -38,7 +33,16 @@ optimist.alias('h', 'help');
 var argv: any = optimist.argv;
 
 if (argv['debug']) {
-	sms.install();
+	var sms: any;
+	try {
+		sms = require('source-map-support');
+	}
+	catch (e) {
+
+	}
+	if (sms) {
+		sms.install();
+	}
 	Promise.longStackTraces();
 }
 
