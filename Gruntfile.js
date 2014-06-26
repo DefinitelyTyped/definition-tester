@@ -124,6 +124,8 @@ module.exports = function (grunt) {
 				'https://github.com/borisyankov/DefinitelyTyped',
 				'tmp'
 			];
+			console.log('cloning repos..');
+
 			git.exec('clone', opts, args, function (err, msg) {
 				console.log(msg);
 				if (err) {
@@ -135,7 +137,7 @@ module.exports = function (grunt) {
 			});
 		}
 		else {
-			run(path.resolve(__dirname, '..', 'DefinitelyTyped'));
+			run(path.resolve(__dirname, '..', 'DefinitelyTyped-alt'));
 		}
 	});
 
@@ -170,7 +172,8 @@ module.exports = function (grunt) {
 	]);
 
 	grunt.registerTask('test', [
-		'build'
+		'build',
+		'exec'
 	]);
 
 	grunt.registerTask('prepublish', [
