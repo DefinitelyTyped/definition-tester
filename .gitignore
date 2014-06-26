@@ -25,3 +25,5 @@ dump/
 _tmp.*
 
 npm-debug.log
+
+/dist
