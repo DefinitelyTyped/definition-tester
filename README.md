@@ -4,11 +4,7 @@
 
 > DefinitelyTyped repository testing infrastructure
 
-Testing infrastructure for the [DefinitelyTyped](https://github.com/borisyankov/DefinitelyTyped) repository.
-
-:warning: Under construction :sunglasses:
-
-Currently mostly usable as a dependency of DT repo.
+Probably only usable as a dependency of [DefinitelyTyped](https://github.com/borisyankov/DefinitelyTyped).
 
 ## Build
 
@@ -28,10 +24,10 @@ See the `Gruntfile.js` for additional commands.
 
 ## History
 
-- 0.0.1 - First release
+- 0.0.x - First releases
 
 ## License
 
-Copyright (c) 2014 Bart van der Schoor @ [DefinitelyTyped](https://github.com/DefinitelyTyped)
+Copyright (c) 2014 [DefinitelyTyped](https://github.com/DefinitelyTyped)
 
 Licensed under the MIT license.
