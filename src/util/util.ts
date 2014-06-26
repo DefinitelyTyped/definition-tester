@@ -5,6 +5,7 @@
 import fs = require('fs');
 import Lazy = require('lazy.js');
 import Promise = require('bluebird');
+import globMod = require('glob');
 
 var referenceTagExp = /\/\/\/[ \t]*<reference[ \t]*path=["']?([\w\.\/_-]*)["']?[ \t]*\/>/g;
 
@@ -27,6 +28,18 @@ export function extractReferenceTags(source: string): string[] {
 		}
 	}
 	return ret;
+}
+
+export function glob(pattern: string, opts?: globMod.IOptions): Promise<string[]> {
+	return new Promise<string[]>((resolve, reject) => {
+		globMod(pattern, opts || {}, (err: Error, files: string[]) => {
+			if (err) {
+				reject(err);
+			} else {
+				resolve(files);
+			}
+		});
+	});
 }
 
 export function fileExists(target: string): Promise<boolean> {

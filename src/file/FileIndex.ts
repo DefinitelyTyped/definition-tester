@@ -3,7 +3,6 @@
 'use strict';
 
 import path = require('path');
-import glob = require('glob');
 import Lazy = require('lazy.js');
 import Promise = require('bluebird');
 
@@ -14,8 +13,6 @@ import IFileDict = require('./IFileDict');
 import IFileArrDict = require('./IFileArrDict');
 
 import ITestOptions = require('../test/ITestOptions');
-
-var tsExp = /\.ts$/;
 
 /////////////////////////////////
 // Track all files in the repo: map full path to File objects
@@ -35,11 +32,14 @@ class FileIndex {
 	}
 
 	private checkAcceptFile(fileName: string): boolean {
-		var ok = tsExp.test(fileName);
+		var ok = /\.ts$/.test(fileName) && /^[a-z]/i.test(fileName);
 		ok = ok && fileName.indexOf('_infrastructure/') < 0;
 		ok = ok && fileName.indexOf('node_modules/') < 0;
-		ok = ok && /^[a-z]/i.test(fileName);
 		return ok;
+	}
+
+	public listIndex(): string[] {
+		return Object.keys(this.fileMap);
 	}
 
 	public hasFile(target: string): boolean {
@@ -63,17 +63,17 @@ class FileIndex {
 	public readIndex(): Promise<void> {
 		this.fileMap = Object.create(null);
 
-		return Promise.promisify(glob).call(glob, '**/*.ts', {
+		return util.glob('**/*.ts', {
 			cwd: this.options.dtPath
-		}).then((filesNames: string[]) => {
-			this.files = Lazy(filesNames).filter((fileName) => {
+		}).then((fileNames: string[]) => {
+			this.files = Lazy(fileNames).filter((fileName) => {
 				return this.checkAcceptFile(fileName);
 			}).map((fileName: string) => {
 				var file = new File(this.options.dtPath, fileName);
 				this.fileMap[file.fullPath] = file;
 				return file;
 			}).toArray();
-		});
+		}).return();
 	}
 
 	public collectDiff(changes: string[]): Promise<void> {
@@ -89,7 +89,7 @@ class FileIndex {
 				var file = this.getFile(full);
 				if (!file) {
 					// TODO figure out what to do here
-					// what does it mean? deleted?ss
+					// what does it mean? deleted?
 					file = new File(this.options.dtPath, local);
 					this.setFile(file);
 					this.removed[full] = file;

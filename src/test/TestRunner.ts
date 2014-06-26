@@ -189,7 +189,8 @@ class TestRunner {
 			return (suite instanceof EvalSuite);
 		}).first();
 
-		if (testEval) {
+		// TODO clean this up
+		if (testEval && !this.options.skipTests) {
 			var existsTestTypings: string[] = Lazy(testEval.testResults).map((testResult) => {
 				return testResult.targetFile.dir;
 			}).reduce((a: string[], b: string) => {
@@ -216,12 +217,12 @@ class TestRunner {
 		this.print.printDiv();
 		this.print.printElapsedTime(this.timer.asString, this.timer.time);
 
-		this.suites.filter((suite: ITestSuite) => {
+		Lazy(this.suites).filter((suite: ITestSuite) => {
 			return suite.printErrorCount;
-		}).forEach((suite: ITestSuite) => {
+		}).each((suite: ITestSuite) => {
 			this.print.printSuiteErrorCount(suite.errorHeadline, suite.ngTests.length, suite.testResults.length);
 		});
-		if (testEval) {
+		if (testEval && withoutTestTypings) {
 			this.print.printSuiteErrorCount('Without tests', withoutTestTypings.length, typings.length, true);
 		}
 

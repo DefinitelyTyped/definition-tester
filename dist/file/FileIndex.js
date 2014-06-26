@@ -1,11 +1,9 @@
 'use strict';
 var path = require('path');
-var glob = require('glob');
 var Lazy = require('lazy.js');
 var Promise = require('bluebird');
 var util = require('../util/util');
 var File = require('./File');
-var tsExp = /\.ts$/;
 /////////////////////////////////
 // Track all files in the repo: map full path to File objects
 /////////////////////////////////
@@ -14,11 +12,13 @@ var FileIndex = (function () {
         this.options = options;
     }
     FileIndex.prototype.checkAcceptFile = function (fileName) {
-        var ok = tsExp.test(fileName);
+        var ok = /\.ts$/.test(fileName) && /^[a-z]/i.test(fileName);
         ok = ok && fileName.indexOf('_infrastructure/') < 0;
         ok = ok && fileName.indexOf('node_modules/') < 0;
-        ok = ok && /^[a-z]/i.test(fileName);
         return ok;
+    };
+    FileIndex.prototype.listIndex = function () {
+        return Object.keys(this.fileMap);
     };
     FileIndex.prototype.hasFile = function (target) {
         return target in this.fileMap;
@@ -38,17 +38,17 @@ var FileIndex = (function () {
     FileIndex.prototype.readIndex = function () {
         var _this = this;
         this.fileMap = Object.create(null);
-        return Promise.promisify(glob).call(glob, '**/*.ts', {
+        return util.glob('**/*.ts', {
             cwd: this.options.dtPath
-        }).then(function (filesNames) {
-            _this.files = Lazy(filesNames).filter(function (fileName) {
+        }).then(function (fileNames) {
+            _this.files = Lazy(fileNames).filter(function (fileName) {
                 return _this.checkAcceptFile(fileName);
             }).map(function (fileName) {
                 var file = new File(_this.options.dtPath, fileName);
                 _this.fileMap[file.fullPath] = file;
                 return file;
             }).toArray();
-        });
+        }).return();
     };
     FileIndex.prototype.collectDiff = function (changes) {
         var _this = this;
@@ -63,7 +63,7 @@ var FileIndex = (function () {
                 var file = _this.getFile(full);
                 if (!file) {
                     // TODO figure out what to do here
-                    // what does it mean? deleted?ss
+                    // what does it mean? deleted?
                     file = new File(_this.options.dtPath, local);
                     _this.setFile(file);
                     _this.removed[full] = file;

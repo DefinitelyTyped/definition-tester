@@ -141,7 +141,8 @@ var TestRunner = (function () {
         var testEval = Lazy(this.suites).filter(function (suite) {
             return (suite instanceof EvalSuite);
         }).first();
-        if (testEval) {
+        // TODO clean this up
+        if (testEval && !this.options.skipTests) {
             var existsTestTypings = Lazy(testEval.testResults).map(function (testResult) {
                 return testResult.targetFile.dir;
             }).reduce(function (a, b) {
@@ -162,12 +163,12 @@ var TestRunner = (function () {
         this.print.printTotalMessage();
         this.print.printDiv();
         this.print.printElapsedTime(this.timer.asString, this.timer.time);
-        this.suites.filter(function (suite) {
+        Lazy(this.suites).filter(function (suite) {
             return suite.printErrorCount;
-        }).forEach(function (suite) {
+        }).each(function (suite) {
             _this.print.printSuiteErrorCount(suite.errorHeadline, suite.ngTests.length, suite.testResults.length);
         });
-        if (testEval) {
+        if (testEval && withoutTestTypings) {
             this.print.printSuiteErrorCount('Without tests', withoutTestTypings.length, typings.length, true);
         }
         this.print.printDiv();

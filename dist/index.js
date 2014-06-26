@@ -6,7 +6,7 @@ var Promise = require('bluebird');
 var findup = require('findup-sync');
 var Const = require('./Const');
 var TestRunner = require('./test/TestRunner');
-var pkgPath = findup('package.json');
+var testerPkgPath = findup('package.json', { cwd: process.cwd() });
 var optimist = opt(process.argv);
 optimist.default('try-without-tscparams', false);
 optimist.default('single-thread', false);
@@ -16,7 +16,7 @@ optimist.default('lint-changes', false);
 optimist.default('skip-tests', false);
 optimist.default('print-files', false);
 optimist.default('print-refmap', false);
-optimist.default('path', path.resolve(path.dirname(pkgPath), '..', '..'));
+optimist.default('path', process.cwd());
 optimist.string('path');
 optimist.boolean('help');
 optimist.boolean('debug');
@@ -29,24 +29,17 @@ if (argv['debug']) {
 }
 var dtPath = path.resolve(argv['path']);
 var cpuCores = os.cpus().length;
-var testerPath = path.dirname(pkgPath);
 if (argv.help) {
     optimist.help();
-    var pkg = require(pkgPath);
-    console.log('Scripts:');
-    console.log('');
-    Object.keys(pkg.scripts).forEach(function (key) {
-        console.log('   $ npm run ' + key);
-    });
     process.exit(0);
 }
 var testFull = (process.env['TRAVIS_BRANCH'] ? /\w\/full$/.test(process.env['TRAVIS_BRANCH']) : false);
 new TestRunner({
-    testerPath: testerPath,
+    testerPath: testerPkgPath,
     dtPath: dtPath,
     concurrent: (argv['single-thread'] ? 1 : Math.round(cpuCores * .75)),
     tscVersion: argv['tsc-version'],
-    tslintConfig: path.join(testerPath, 'conf', 'tslint.json'),
+    tslintConfig: path.join(testerPkgPath, 'conf', 'tslint.json'),
     testChanges: (testFull ? false : argv['test-changes']),
     lintChanges: (testFull ? false : argv['lint-changes']),
     skipTests: argv['skip-tests'],

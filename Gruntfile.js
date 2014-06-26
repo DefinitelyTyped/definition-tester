@@ -3,6 +3,9 @@ module.exports = function (grunt) {
 
 	require('source-map-support').install();
 
+	var path = require('path');
+	var childProcess = require('child_process');
+
 	grunt.loadNpmTasks('grunt-ts');
 	grunt.loadNpmTasks('grunt-ts-clean');
 	grunt.loadNpmTasks('grunt-tslint');
@@ -35,7 +38,7 @@ module.exports = function (grunt) {
 				options: {
 					verbose: false
 				},
-				src: ['dist/**/*', '!dist/index.d.ts'],
+				src: ['dist/**/*'],
 				dot: true
 			}
 		},
@@ -47,9 +50,12 @@ module.exports = function (grunt) {
 			dist: [
 				'dist/**/*'
 			],
-			tmp: [
+			tmp: {
+				dot: true,
+				src: [
 				'tmp/**/*'
-			],
+				]
+			},
 			test: [
 				'test/tmp/**/*'
 			]
@@ -71,8 +77,78 @@ module.exports = function (grunt) {
 				src: ['src/index.ts'],
 				outDir: 'dist/'
 			}
+		},
+		exec: {
+			options: {
+				clone: (process.env.TRAVIS === 'true')
+			}
 		}
 	});
+
+	grunt.registerTask('exec', function () {
+		var options = this.options({
+			full: false
+		});
+		var done = this.async();
+
+		var run = function (target) {
+			var args = [];
+			args.push(path.resolve(__dirname, 'dist', 'index.js'));
+			if (!options.full) {
+				args.push('--skip-tests');
+			}
+			args.push('--debug');
+			args.push('--path', target);
+			var opts = {
+				cwd: target,
+				stdio: 'inherit'
+			};
+			childProcess.spawn('node', args, opts).on('close', function (code) {
+				console.log('child process exited with code ' + code);
+				done((code === 0));
+			});
+		};
+
+		if (options.full) {
+			var fs = require('fs');
+			fs.mkdirSync('tmp');
+
+			var Git = require('git-wrapper');
+			var git = new Git({
+				'git-dir': 'tmp/.git'
+			});
+			var opts = {
+				depth: 20
+			};
+			var args = [
+				'https://github.com/borisyankov/DefinitelyTyped',
+				'tmp'
+			];
+			git.exec('clone', opts, args, function (err, msg) {
+				console.log(msg);
+				if (err) {
+					done(err);
+				}
+				else {
+					run(path.resolve(__dirname, 'tmp'));
+				}
+			});
+		}
+		else {
+			run(path.resolve(__dirname, '..', 'DefinitelyTyped'));
+		}
+	});
+
+	grunt.registerTask('dev', [
+		'prep',
+		'ts:build',
+		'exec'
+	]);
+
+	grunt.registerTask('run', [
+		'clean:tmp',
+		'exec'
+	]);
 
 	grunt.registerTask('prep', [
 		'clean:tmp',
@@ -89,7 +165,8 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('build', [
 		'compile',
-		'sweep'
+		'sweep',
+		'ts_clean:dist'
 	]);
 
 	grunt.registerTask('test', [
@@ -107,7 +184,6 @@ module.exports = function (grunt) {
 		'clean:test'
 	]);
 
-	grunt.registerTask('dev', ['ts:typings']);
 	grunt.registerTask('debug', ['build']);
 
 	grunt.registerTask('default', ['build']);
