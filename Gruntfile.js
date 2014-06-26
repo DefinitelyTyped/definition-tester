@@ -80,7 +80,7 @@ module.exports = function (grunt) {
 		},
 		exec: {
 			options: {
-				clone: (process.env.TRAVIS === 'true')
+				full: (process.env.TRAVIS === 'true')
 			}
 		}
 	});
