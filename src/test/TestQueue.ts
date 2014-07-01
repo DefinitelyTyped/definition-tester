@@ -5,47 +5,83 @@ import Promise = require('bluebird');
 import ITest = require('./ITest');
 import TestResult = require('./TestResult');
 
+class TestRunItem {
+
+	test: ITest;
+	attempts: number = 0;
+	defer: Promise.Resolver<TestResult>;
+
+	constructor (test: ITest) {
+		this.test = test;
+		this.defer = Promise.defer<TestResult>();
+	}
+}
+
 /////////////////////////////////
 // Parallel execute Tests
 /////////////////////////////////
 class TestQueue {
 
-	private queue: Function[] = [];
-	private active: ITest[] = [];
+	private retries: TestRunItem[] = [];
+	private queue: TestRunItem[] = [];
+	private active: TestRunItem[] = [];
 	private concurrent: number;
+	private maxConcurrent: number;
+	private maxRetry: number = 3;
 
 	constructor(concurrent: number) {
-		this.concurrent = Math.max(1, concurrent);
+		this.maxConcurrent = Math.max(1, concurrent);
+		this.concurrent = this.maxConcurrent;
 	}
 
 	// add to queue and return a promise
 	run(test: ITest): Promise<TestResult> {
-		var defer = Promise.defer<TestResult>();
-		// add a closure to queue
-		this.queue.push(() => {
-			// run it
-			var p = test.run();
-			p.then(defer.resolve.bind(defer), defer.reject.bind(defer));
-			p.finally(() => {
-				var i = this.active.indexOf(test);
-				if (i > -1) {
-					this.active.splice(i, 1);
-				}
-				this.step();
-			});
-			// return it
-			return test;
-		});
-		this.step();
-		// defer it
-		return defer.promise;
+		var item = new TestRunItem(test);
+		this.queue.push(item);
+		this.check();
+		return item.defer.promise;
+	}
+
+	private check(): void {
+		while (this.queue.length > 0 && this.active.length < this.concurrent) {
+			this.step();
+		}
+		// when done go for retries
+		if (this.queue.length === 0 && this.active.length === 0 && this.retries.length > 0) {
+			this.queue = this.retries;
+			this.retries = [];
+			// lower the concurrency (fight out-of-memory errors)
+			this.concurrent = Math.max(1, this.concurrent / 2);
+			// check again
+			this.check();
+		}
 	}
 
 	private step(): void {
-		while (this.queue.length > 0 && this.active.length < this.concurrent) {
-			// console.log([this.queue.length, this.active.length, this.concurrent]);
-			this.active.push(this.queue.pop().call(null));
-		}
+		var item = this.queue.pop();
+		item.attempts++;
+		item.test.run().then((res) => {
+			// see if we can retry
+			if (!res.success && item.attempts < this.maxRetry) {
+				if (res.stderr && /^Killed/.test(res.stderr)) {
+					this.retries.push(item);
+					return;
+				}
+			}
+			res.attempts = item.attempts;
+			item.defer.resolve(res);
+		}).catch((err) => {
+			item.defer.reject(err);
+		}).finally(() => {
+			var i = this.active.indexOf(item);
+			if (i > -1) {
+				this.active.splice(i, 1);
+			}
+			process.nextTick(() => {
+				this.check();
+			});
+		});
+		this.active.push(item);
 	}
 }
 

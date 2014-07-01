@@ -14,6 +14,7 @@ class TestResult {
 	stdout: string;
 	stderr: string;
 	exitCode: number;
+	attempts: number = 1;
 
 	public get success(): boolean {
 		return this.exitCode === 0;

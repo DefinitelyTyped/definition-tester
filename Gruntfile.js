@@ -96,6 +96,7 @@ module.exports = function (grunt) {
 			args.push(path.resolve(__dirname, 'dist', 'index.js'));
 			if (!options.full) {
 				args.push('--skip-tests');
+				// args.push('--test-changes');
 			}
 			args.push('--debug');
 			args.push('--path', target);
@@ -137,7 +138,7 @@ module.exports = function (grunt) {
 			});
 		}
 		else {
-			run(path.resolve(__dirname, '..', 'DefinitelyTyped-alt'));
+			run(path.resolve(__dirname, '..', 'DefinitelyTyped-dojo'));
 		}
 	});
 

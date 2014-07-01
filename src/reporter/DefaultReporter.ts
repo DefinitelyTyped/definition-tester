@@ -15,7 +15,12 @@ class DefaultTestReporter implements ITestReporter {
 	}
 
 	public printPositiveCharacter(testResult: TestResult) {
-		this.print.out('\33[36m\33[1m' + '.' + '\33[0m');
+		if (testResult.attempts > 1) {
+			this.print.out('\33[36m\33[1m' + testResult.attempts + '\33[0m');
+		}
+		else {
+			this.print.out('\33[36m\33[1m' + '.' + '\33[0m');
+		}
 		this.index++;
 		this.printBreakIfNeeded(this.index);
 	}
