@@ -11,9 +11,9 @@ class TestResult {
 	hostedBy: ITestSuite;
 	targetFile: File;
 
-	stdout: string;
-	stderr: string;
-	exitCode: number;
+	stdout: string = '';
+	stderr: string = '';
+	exitCode: number = 0;
 	attempts: number = 1;
 
 	public get success(): boolean {

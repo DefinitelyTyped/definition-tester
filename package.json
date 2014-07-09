@@ -1,6 +1,6 @@
 {
   "name": "definition-tester",
-  "version": "0.0.6",
+  "version": "0.0.7",
   "description": "DefinitelyTyped repository testing infrastructure",
   "keywords": [
     "typescript",
@@ -36,7 +36,7 @@
   },
   "main": "./index.js",
   "bin": {
-    "dt-test": "./bin/cli.js"
+    "dt": "./bin/cli.js"
   },
   "dependencies": {
     "bluebird": "^1.2.4",
@@ -45,6 +45,7 @@
     "git-wrapper": "~0.1.1",
     "glob": "^4.0.2",
     "lazy.js": "~0.3.2",
+    "manticore": "^0.2.2",
     "optimist": "~0.6.1",
     "tslint": "^0.4.9"
   },
@@ -57,7 +58,7 @@
     "grunt-tslint": "^0.4.1",
     "jshint-path-reporter": "^0.1.3",
     "mocha-unfunk-reporter": "^0.4.0",
-    "source-map-support": "~0.2.5",
+    "source-map-support": "^0.2.7",
     "tslint-path-formatter": "^0.1.1",
     "typescript": "^1.0.1"
   }

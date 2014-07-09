@@ -44,12 +44,15 @@ class TestRunner {
 
 	constructor(options?: ITestOptions) {
 		this.options = options;
-		this.options.findNotRequiredTscparams = !!this.options.findNotRequiredTscparams;
 
 		this.index = new FileIndex(this.options);
 		this.changes = new GitChanges(this.options.dtPath);
 
 		this.print = new Print(this.options.tscVersion);
+
+		if (this.options.debug) {
+			console.dir(this.options);
+		}
 	}
 
 	public addSuite(suite: ITestSuite): void {
@@ -110,7 +113,7 @@ class TestRunner {
 						this.print.printTestInternal();
 						return this.runTests(this.index.files);
 					}
-					else if (this.options.testChanges) {
+					else if (this.options.changes) {
 						this.print.printQueue(targets);
 						return this.runTests(targets);
 					}
@@ -129,47 +132,48 @@ class TestRunner {
 	}
 
 	private runTests(files: File[]): Promise<void> {
+		var syntaxChecking = new SyntaxSuite(this.options);
+		var testEval = new EvalSuite(this.options);
+		var headers = new HeaderSuite(this.options);
+		var linter = new TSLintSuite(this.options);
+		var tscparams = new TscparamsSuite(this.options, this.print);
+
 		return Promise.attempt(() => {
 			assert(Array.isArray(files), 'files must be array');
-
-			var syntaxChecking = new SyntaxSuite(this.options);
-			var testEval = new EvalSuite(this.options);
-			var linter = new TSLintSuite(this.options);
-			var headers = new HeaderSuite(this.options);
 
 			var filters = [];
 			// don't mess with this ordering
 			filters.push(syntaxChecking.filterTargetFiles(files));
 			filters.push(testEval.filterTargetFiles(files));
 			filters.push(headers.filterTargetFiles(files));
-			// filters.push(linter.filterTargetFiles(files));
-
-			if (!this.options.findNotRequiredTscparams) {
-				this.addSuite(syntaxChecking);
-				this.addSuite(testEval);
-				this.addSuite(headers);
-				// this.addSuite(linter);
-			}
-			else {
-				this.addSuite(new TscparamsSuite(this.options, this.print));
-			}
+			filters.push(linter.filterTargetFiles(files));
+			filters.push(tscparams.filterTargetFiles(files));
 
 			return Promise.all(filters);
 
-		}).spread((syntaxFiles: File[], testFiles: File[]) => {
+		}).spread((syntaxFiles: File[], testFiles: File[], headerFiles: File[]) => {
 
-			this.print.init(syntaxFiles.length, testFiles.length, files.length);
+			this.print.init(files.length, syntaxFiles.length, testFiles.length);
 			this.print.printHeader(this.options);
+
+			if (this.options.tests) {
+				this.addSuite(syntaxChecking);
+				this.addSuite(testEval);
+			}
+			if (this.options.lint) {
+				this.addSuite(linter);
+			}
+			if (this.options.headers) {
+				this.addSuite(headers);
+			}
+			if (this.options.tscparams) {
+				this.addSuite(tscparams);
+			}
 
 			return Promise.reduce(this.suites, (count: number, suite: ITestSuite) => {
 				suite.testReporter = suite.testReporter || new DefaultReporter(this.print);
 
 				this.print.printSuiteHeader(suite.testSuiteName);
-
-				if (this.options.skipTests) {
-					this.print.printWarnCode('skipped test');
-					return Promise.resolve(count++);
-				}
 
 				return suite.start(files, (testResult) => {
 					this.print.printTestComplete(testResult);
@@ -190,7 +194,7 @@ class TestRunner {
 		}).first();
 
 		// TODO clean this up
-		if (testEval && !this.options.skipTests) {
+		if (testEval) {
 			var existsTestTypings: string[] = Lazy(testEval.testResults).map((testResult) => {
 				return testResult.targetFile.dir;
 			}).reduce((a: string[], b: string) => {

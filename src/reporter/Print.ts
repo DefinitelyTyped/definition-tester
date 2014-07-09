@@ -26,7 +26,7 @@ class Print {
 
 	}
 
-	public init(typings: number, tests: number, tsFiles: number) {
+	public init(tsFiles: number, typings: number, tests: number) {
 		this.typings = typings;
 		this.tests = tests;
 		this.tsFiles = tsFiles;

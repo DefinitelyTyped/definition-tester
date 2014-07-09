@@ -61,3 +61,15 @@ export function readFile(target: string): Promise<string> {
 		});
 	});
 }
+
+export function readJSON(target: string): Promise<string> {
+	return readFile(target).then((contents) => {
+		return JSON.parse(contents);
+	});
+}
+
+export function fixPath(str: string): string {
+	return str.replace(/^[a-z]:/i, (s: string) => {
+		return s.toLowerCase();
+	});
+}

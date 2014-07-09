@@ -55,14 +55,13 @@ class FileIndex {
 
 	public setFile(file: File): void {
 		if (file.fullPath in this.fileMap) {
-			throw new Error('cannot overwrite file');
+			throw new Error('cannot overwrite file: ' + file.fullPath);
 		}
 		this.fileMap[file.fullPath] = file;
 	}
 
 	public readIndex(): Promise<void> {
 		this.fileMap = Object.create(null);
-
 		return util.glob('**/*.ts', {
 			cwd: this.options.dtPath
 		}).then((fileNames: string[]) => {
@@ -85,7 +84,7 @@ class FileIndex {
 			Lazy(changes).filter((full) => {
 				return this.checkAcceptFile(full);
 			}).uniq().each((local) => {
-				var full = path.resolve(this.options.dtPath, local);
+				var full = util.fixPath(path.resolve(this.options.dtPath, local));
 				var file = this.getFile(full);
 				if (!file) {
 					// TODO figure out what to do here

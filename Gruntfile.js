@@ -65,7 +65,7 @@ module.exports = function (grunt) {
 				fast: 'never',
 				target: 'es5',
 				module: 'commonjs',
-				sourcemap: true,
+				sourceMap: true,
 				declaration: true,
 				comments: true,
 				verbose: true
@@ -74,18 +74,20 @@ module.exports = function (grunt) {
 				options: {
 					noImplicitAny: true
 				},
-				src: ['src/index.ts'],
+				src: ['src/**/*.ts'],
 				outDir: 'dist/'
 			}
 		},
 		exec: {
-			options: {
-				full: (process.env.TRAVIS === 'true')
+			test: {
+				options: {
+					full: (process.env.TRAVIS === 'true')
+				}
 			}
 		}
 	});
 
-	grunt.registerTask('exec', function () {
+	grunt.registerMultiTask('exec', function () {
 		var options = this.options({
 			full: false
 		});
@@ -94,9 +96,14 @@ module.exports = function (grunt) {
 		var run = function (target) {
 			var args = [];
 			args.push(path.resolve(__dirname, 'dist', 'index.js'));
-			if (!options.full) {
-				args.push('--skip-tests');
-				// args.push('--test-changes');
+			if (options.tests) {
+				args.push('--tests');
+			}
+			if (options.lint) {
+				args.push('--lint');
+			}
+			if (options.changes) {
+				args.push('--changes');
 			}
 			args.push('--debug');
 			args.push('--path', target);
@@ -168,8 +175,7 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('build', [
 		'compile',
-		'sweep',
-		'ts_clean:dist'
+		'sweep'
 	]);
 
 	grunt.registerTask('test', [

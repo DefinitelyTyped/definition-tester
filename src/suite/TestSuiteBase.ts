@@ -46,11 +46,11 @@ class TestSuiteBase implements ITestSuite {
 
 		return this.filterTargetFiles(targetFiles).then((targetFiles) => {
 			// tests get queued for multi-threading
-			return Promise.all(targetFiles.map((targetFile: File) => {
+			return Promise.map(targetFiles, (targetFile: File) => {
 				return this.runTest(targetFile).then((result) => {
 					testCallback(result);
 				});
-			}));
+			});
 		}).then(() => {
 			this.timer.end();
 			return this;

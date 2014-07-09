@@ -1,15 +1,19 @@
 interface ITestOptions {
-	dtPath: string;
 	testerPath: string;
+	dtPath: string;
+	concurrent: number;
 	tscVersion: string;
 	tslintConfig: string;
-	concurrent?: number;
-	testChanges?: boolean;
-	lintChanges?: boolean;
-	skipTests?: boolean;
-	printFiles?: boolean;
-	printRefMap?: boolean;
-	findNotRequiredTscparams?: boolean;
+
+	changes: boolean;
+	tests: boolean;
+	lint: boolean;
+	headers: boolean;
+	tscparams: boolean;
+
+	debug: boolean;
+	printFiles: boolean;
+	printRefMap: boolean;
 }
 
 export = ITestOptions;

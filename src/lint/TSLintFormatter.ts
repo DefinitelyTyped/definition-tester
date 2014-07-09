@@ -37,11 +37,11 @@ export class Formatter {
 				var line = lineAndCharacter.line() + 1;
 				var character = lineAndCharacter.character() + 1;
 
-				output.push('>-- ' + character + ', ' + line + ' : ' + failureString + ' (' + ruleName + ')');
+				output.push('[' + ruleName + '] ' + failureString + ' at line ' + line + ', character ' + character + ':');
 				output.push('');
 				output.push(lines[lineAndCharacter.line()].replace(/\t/g, '    '));
 				output.push(point(character));
-				output.push('');
+				output.push('\n');
 			}
 		}
 		return output.join('\n');

@@ -8,24 +8,38 @@ import Promise = require('bluebird');
 import findup = require('findup-sync');
 
 import Const = require('./Const');
+import util = require('./util/util');
 import TestRunner = require('./test/TestRunner');
 
-var testerPkgPath = findup('package.json', {cwd: process.cwd()});
+var testerPkgPath = path.resolve(findup('package.json', {cwd: process.cwd()}));
 
 var optimist = opt(process.argv);
-optimist.default('try-without-tscparams', false);
-optimist.default('single-thread', false);
+optimist.boolean('single-thread');
+
+optimist.string('tsc-version');
 optimist.default('tsc-version', Const.DEFAULT_TSC_VERSION);
 
-optimist.default('test-changes', false);
-optimist.default('lint-changes', false);
-optimist.default('skip-tests', false);
+optimist.boolean('changes');
+optimist.default('changes', true);
+
+optimist.boolean('headers');
+optimist.default('headers', true);
+
+optimist.boolean('tests');
+optimist.default('tests', true);
+
+optimist.boolean('lint');
+optimist.default('lint', false);
+
+optimist.boolean('tscparams');
+optimist.default('tscparams', false);
+
 optimist.default('print-files', false);
 optimist.default('print-refmap', false);
-optimist.default('path', process.cwd());
 
 optimist.string('path');
-optimist.boolean('help');
+optimist.default('path', process.cwd());
+
 optimist.boolean('debug');
 optimist.describe('help', 'print help');
 optimist.alias('h', 'help');
@@ -54,20 +68,30 @@ if (argv.help) {
 	process.exit(0);
 }
 
+Promise.onPossiblyUnhandledRejection((reason) => {
+	console.error('onPossiblyUnhandledRejection');
+	console.dir(reason);
+	throw reason;
+});
+
 var testFull = (process.env['TRAVIS_BRANCH'] ? /\w\/full$/.test(process.env['TRAVIS_BRANCH']) : false);
 
 new TestRunner({
-	testerPath: testerPkgPath,
-	dtPath: dtPath,
+	testerPath: util.fixPath(path.dirname(testerPkgPath)),
+	dtPath: util.fixPath(dtPath),
 	concurrent: (argv['single-thread'] ? 1 : Math.round(cpuCores * .75)),
 	tscVersion: argv['tsc-version'],
-	tslintConfig: path.join(testerPkgPath, 'conf', 'tslint.json'),
-	testChanges: (testFull ? false : argv['test-changes']), // allow magic branch
-	lintChanges: (testFull ? false : argv['lint-changes']), // allow magic branch
-	skipTests: argv['skip-tests'],
+	tslintConfig: path.join(path.dirname(testerPkgPath), 'conf', 'tslint.json'),
+
+	changes: (testFull ? false : argv['changes']),
+	tests: argv['tests'],
+	lint: argv['lint'],
+	headers: argv['headers'],
+	tscparams: argv['changes'],
+
+	debug: argv['debug'],
 	printFiles: argv['print-files'],
-	printRefMap: argv['print-refmap'],
-	findNotRequiredTscparams: argv['try-without-tscparam']
+	printRefMap: argv['print-refmap']
 }).run().then((success) => {
 	if (!success) {
 		process.exit(1);
