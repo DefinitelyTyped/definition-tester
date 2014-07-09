@@ -105,7 +105,9 @@ module.exports = function (grunt) {
 			if (options.changes) {
 				args.push('--changes');
 			}
-			args.push('--debug');
+			if (options.debug) {
+				args.push('--debug');
+			}
 			args.push('--path', target);
 			var opts = {
 				cwd: target,

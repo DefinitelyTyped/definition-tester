@@ -1,6 +1,6 @@
 interface ITscExecOptions {
-	tscPath?: string;
-	tscVersion?: string;
+	tscPath: string;
+	tscVersion: string;
 	useTscParams?: boolean;
 	checkNoImplicitAny?: boolean;
 }

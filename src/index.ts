@@ -60,7 +60,7 @@ if (argv['debug']) {
 	Promise.longStackTraces();
 }
 
-var dtPath = path.resolve(argv['path']);
+var dtPath = util.fixPath(path.resolve(argv['path']));
 var cpuCores = os.cpus().length;
 
 if (argv.help) {
@@ -78,16 +78,17 @@ var testFull = (process.env['TRAVIS_BRANCH'] ? /\w\/full$/.test(process.env['TRA
 
 new TestRunner({
 	testerPath: util.fixPath(path.dirname(testerPkgPath)),
-	dtPath: util.fixPath(dtPath),
+	dtPath: dtPath,
 	concurrent: (argv['single-thread'] ? 1 : Math.round(cpuCores * .75)),
-	tscVersion: argv['tsc-version'],
+	tscVersion: argv['tsc-version'] || Const.DEFAULT_TSC_VERSION,
+	tscPath: path.join(dtPath, '_infrastructure', 'tests', 'typescript'),
 	tslintConfig: path.join(path.dirname(testerPkgPath), 'conf', 'tslint.json'),
 
 	changes: (testFull ? false : argv['changes']),
 	tests: argv['tests'],
 	lint: argv['lint'],
 	headers: argv['headers'],
-	tscparams: argv['changes'],
+	tscparams: argv['tscparams'],
 
 	debug: argv['debug'],
 	printFiles: argv['print-files'],

@@ -2,6 +2,7 @@ interface ITestOptions {
 	testerPath: string;
 	dtPath: string;
 	concurrent: number;
+	tscPath: string;
 	tscVersion: string;
 	tslintConfig: string;
 

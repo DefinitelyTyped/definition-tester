@@ -59,7 +59,7 @@ class TestSuiteBase implements ITestSuite {
 
 	public runTest(targetFile: File): Promise<TestResult> {
 		return this.queue.run(new TscTest(this, targetFile, {
-			tscPath: path.join(this.options.dtPath, '_infrastructure', 'tests', 'typescript'),
+			tscPath: this.options.tscPath,
 			tscVersion: this.options.tscVersion
 		})).then((result) => {
 			this.testResults.push(result);
