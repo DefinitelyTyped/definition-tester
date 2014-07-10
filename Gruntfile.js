@@ -68,7 +68,7 @@ module.exports = function (grunt) {
 				sourceMap: true,
 				declaration: true,
 				comments: true,
-				verbose: true
+				verbose: false
 			},
 			build: {
 				options: {
