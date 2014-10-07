@@ -80,7 +80,7 @@ class TestRunner {
 
 		// only includes .d.ts or -tests.ts or -test.ts or .ts
 		return this.index.readIndex().then(() => {
-			return this.changes.readChanges().catch((err) => {
+			return this.changes.readChanges().catch((err): string[] => {
 				console.dir(err.message);
 				return [];
 			});
@@ -141,7 +141,7 @@ class TestRunner {
 		return Promise.attempt(() => {
 			assert(Array.isArray(files), 'files must be array');
 
-			var filters = [];
+			var filters: Promise<File[]>[] = [];
 			// don't mess with this ordering
 			filters.push(syntaxChecking.filterTargetFiles(files));
 			filters.push(testEval.filterTargetFiles(files));
