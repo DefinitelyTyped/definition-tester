@@ -20,7 +20,10 @@ optimist.string('tsc-version');
 optimist.default('tsc-version', Const.DEFAULT_TSC_VERSION);
 
 optimist.boolean('changes');
-optimist.default('changes', true);
+optimist.default('changes', false);
+
+optimist.boolean('dry');
+optimist.default('dry', false);
 
 optimist.boolean('headers');
 optimist.default('headers', true);
@@ -69,7 +72,7 @@ if (argv.help) {
 }
 
 Promise.onPossiblyUnhandledRejection((reason) => {
-	console.error('onPossiblyUnhandledRejection');
+	console.error('Error: Promise.possiblyUnhandledRejection:');
 	console.dir(reason);
 	throw reason;
 });
@@ -85,10 +88,10 @@ new TestRunner({
 	tslintConfig: path.join(path.dirname(testerPkgPath), 'conf', 'tslint.json'),
 
 	changes: (testFull ? false : argv['changes']),
-	tests: argv['tests'],
-	lint: argv['lint'],
-	headers: argv['headers'],
-	tscparams: argv['tscparams'],
+	tests: argv['dry'] ? false : argv['tests'],
+	lint: argv['dry'] ? false : argv['lint'],
+	headers: argv['dry'] ? false : argv['headers'],
+	tscparams: argv['dry'] ? false : argv['tscparams'],
 
 	debug: argv['debug'],
 	printFiles: argv['print-files'],

@@ -86,15 +86,19 @@ class Print {
 		this.out('=============================================================================\n');
 	}
 
+	public trimTravis(str: string): string {
+		return String(str).replace(/^\/home\/travis\/build\/[\w\-\.]+\/[\w\-\.]+\//gm, '');
+	}
+
 	public printErrorsForFile(testResult: TestResult) {
 		this.out('----------------- For file:' + testResult.targetFile.filePathWithName);
 		if (testResult.stdout) {
 			// after 1.1.0-1
-			this.printBreak().out(testResult.stdout).printBreak();
+			this.printBreak().out(this.trimTravis(testResult.stdout)).printBreak();
 		}
 		else if (testResult.stderr) {
 			// before 1.1.0-1
-			this.printBreak().out(testResult.stderr).printBreak();
+			this.printBreak().out(this.trimTravis(testResult.stderr)).printBreak();
 		}
 		else {
 			this.printBreak().out('no stderr content').printBreak();
