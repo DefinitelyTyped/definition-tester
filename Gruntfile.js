@@ -89,7 +89,7 @@ module.exports = function (grunt) {
 
 	grunt.registerMultiTask('exec', function () {
 		var options = this.options({
-			full: false
+			full: true
 		});
 		var done = this.async();
 
@@ -121,18 +121,19 @@ module.exports = function (grunt) {
 
 		if (options.full) {
 			var fs = require('fs');
-			fs.mkdirSync('tmp');
+			var repoDir = path.join(__dirname, 'tmp');
+			fs.mkdirSync(repoDir);
 
 			var Git = require('git-wrapper');
 			var git = new Git({
-				'git-dir': 'tmp/.git'
+				'git-dir': path.join(repoDir, '.git')
 			});
 			var opts = {
 				depth: 20
 			};
 			var args = [
 				'https://github.com/borisyankov/DefinitelyTyped',
-				'tmp'
+				repoDir
 			];
 			console.log('cloning repos..');
 
@@ -142,12 +143,12 @@ module.exports = function (grunt) {
 					done(err);
 				}
 				else {
-					run(path.resolve(__dirname, 'tmp'));
+					run(repoDir);
 				}
 			});
 		}
 		else {
-			run(path.resolve(__dirname, '..', 'DefinitelyTyped-dojo'));
+			run(path.resolve(__dirname, '..', 'DefinitelyTyped-alt'));
 		}
 	});
 
