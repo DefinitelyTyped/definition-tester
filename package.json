@@ -45,7 +45,7 @@
     "git-wrapper": "~0.1.1",
     "glob": "^4.0.2",
     "lazy.js": "~0.3.2",
-    "manticore": "^0.2.2",
+    "manticore": "^0.2.4",
     "optimist": "~0.6.1",
     "tslint": "^0.4.9"
   },
