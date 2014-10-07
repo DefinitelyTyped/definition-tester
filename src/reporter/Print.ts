@@ -88,7 +88,12 @@ class Print {
 
 	public printErrorsForFile(testResult: TestResult) {
 		this.out('----------------- For file:' + testResult.targetFile.filePathWithName);
-		if (testResult.stderr) {
+		if (testResult.stdout) {
+			// after 1.1.0-1
+			this.printBreak().out(testResult.stdout).printBreak();
+		}
+		else if (testResult.stderr) {
+			// before 1.1.0-1
 			this.printBreak().out(testResult.stderr).printBreak();
 		}
 		else {
