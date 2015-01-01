@@ -6,7 +6,6 @@ import assert = require('assert');
 import Lazy = require('lazy.js');
 import Promise = require('bluebird');
 
-import Const = require('../Const');
 import Print = require('../reporter/Print');
 import DefaultReporter = require('../reporter/DefaultReporter');
 
@@ -48,7 +47,7 @@ class TestRunner {
 		this.index = new FileIndex(this.options);
 		this.changes = new GitChanges(this.options.dtPath);
 
-		this.print = new Print(this.options.tscVersion);
+		this.print = new Print();
 
 		if (this.options.debug) {
 			console.dir(this.options);

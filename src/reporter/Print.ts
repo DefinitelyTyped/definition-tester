@@ -22,7 +22,7 @@ class Print {
 	tests: number;
 	tsFiles: number;
 
-	constructor(public version: string) {
+	constructor() {
 
 	}
 
@@ -54,7 +54,8 @@ class Print {
 		this.out('=============================================================================\n');
 		this.out('                    \33[36m\33[1mDefinitelyTyped Test Runner 0.5.0\33[0m\n');
 		this.out('=============================================================================\n');
-		this.out(' \33[36m\33[1mTypescript version:\33[0m ' + this.version + '\n');
+		// TODO put back
+		// this.out(' \33[36m\33[1mTypescript version:\33[0m ' + this.version + '\n');
 		this.out(' \33[36m\33[1mTypings           :\33[0m ' + this.typings + '\n');
 		this.out(' \33[36m\33[1mTests             :\33[0m ' + this.tests + '\n');
 		this.out(' \33[36m\33[1mTypeScript files  :\33[0m ' + this.tsFiles + '\n');
