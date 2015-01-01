@@ -14,14 +14,7 @@ import ITscExecOptions = require('./ITscExecOptions');
 class Tsc {
 
 	public static run(tsfile: string, options: ITscExecOptions): Promise<exec.ExecResult> {
-		var tscPath: string;
-		if (options.tscPath) {
-			tscPath = options.tscPath;
-		} else {
-			var tscDir = path.dirname(require.resolve('typescript'));
-			tscPath = path.join(tscDir, 'tsc.js');
-		}
-
+		var tscPath = options.tscPath;
 		if (typeof options.checkNoImplicitAny === 'undefined') {
 			options.checkNoImplicitAny = true;
 		}

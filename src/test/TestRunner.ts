@@ -1,6 +1,7 @@
 /// <reference path="../_ref.d.ts" />
 
 import path = require('path');
+import fs = require('fs');
 import assert = require('assert');
 
 import Lazy = require('lazy.js');
@@ -47,7 +48,15 @@ class TestRunner {
 		this.index = new FileIndex(this.options);
 		this.changes = new GitChanges(this.options.dtPath);
 
-		this.print = new Print();
+		var tscVersion = 'unknown';
+		try {
+			var tscPackagePath = path.resolve(this.options.tscPath, '../../package.json');
+			var json = fs.readFileSync(tscPackagePath, {encoding: 'utf8'});
+			var data = JSON.parse(json);
+			tscVersion = data.version;
+		} catch (e) {
+		}
+		this.print = new Print(tscVersion);
 
 		if (this.options.debug) {
 			console.dir(this.options);

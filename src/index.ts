@@ -40,6 +40,12 @@ optimist.string('path');
 optimist.default('path', process.cwd());
 
 optimist.string('tsc-path');
+try {
+	var tscDir = path.dirname(require.resolve('typescript'));
+	var tscPath = path.join(tscDir, 'tsc.js');
+	optimist.default('tsc-path', tscPath);
+} catch (e) {
+}
 
 optimist.boolean('debug');
 optimist.describe('help', 'print help');
