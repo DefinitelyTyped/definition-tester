@@ -186,7 +186,7 @@ class FileIndex {
 	}
 
 	public collectTargets(): Promise<File[]> {
-		return new Promise<File[]>((resolve) => {
+		return new Promise<File[]>((resolve: (result: File[]) => void) => {
 			// map out files linked to changes
 			// - queue holds files touched by a change
 			// - pre-fill with actually changed files

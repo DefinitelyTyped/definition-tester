@@ -31,7 +31,7 @@ export function extractReferenceTags(source: string): string[] {
 }
 
 export function glob(pattern: string, opts?: globMod.IOptions): Promise<string[]> {
-	return new Promise<string[]>((resolve, reject) => {
+	return new Promise<string[]>((resolve: (result: string[]) => void, reject: (error: any) => void) => {
 		globMod(pattern, opts || {}, (err: Error, files: string[]) => {
 			if (err) {
 				reject(err);
@@ -43,7 +43,7 @@ export function glob(pattern: string, opts?: globMod.IOptions): Promise<string[]
 }
 
 export function fileExists(target: string): Promise<boolean> {
-	return new Promise<boolean>((resolve, reject) => {
+	return new Promise<boolean>((resolve: (result: boolean) => void, reject: (error: any) => void) => {
 		fs.exists(target, (bool: boolean) => {
 			resolve(bool);
 		});
@@ -51,7 +51,7 @@ export function fileExists(target: string): Promise<boolean> {
 }
 
 export function readFile(target: string): Promise<string> {
-	return new Promise<string>((resolve, reject) => {
+	return new Promise<string>((resolve: (result: string) => void, reject: (error: any) => void) => {
 		fs.readFile(target, 'utf-8', (err: Error, contents: string) => {
 			if (err) {
 				reject(err);
