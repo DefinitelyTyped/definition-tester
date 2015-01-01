@@ -53,7 +53,7 @@ module.exports = function (grunt) {
 			tmp: {
 				dot: true,
 				src: [
-				'tmp/**/*'
+					'tmp/'
 				]
 			},
 			test: [
@@ -119,37 +119,37 @@ module.exports = function (grunt) {
 			});
 		};
 
-		if (options.full) {
-			var fs = require('fs');
-			var repoDir = path.join(__dirname, 'tmp');
-			fs.mkdirSync(repoDir);
-
-			var Git = require('git-wrapper');
-			var git = new Git({
-				'git-dir': path.join(repoDir, '.git')
-			});
-			var opts = {
-				depth: 20
-			};
-			var args = [
-				'https://github.com/borisyankov/DefinitelyTyped',
-				repoDir
-			];
-			console.log('cloning repos..');
-
-			git.exec('clone', opts, args, function (err, msg) {
-				console.log(msg);
-				if (err) {
-					done(err);
-				}
-				else {
-					run(repoDir);
-				}
-			});
+		if (!options.full) {
+			// TODO prepare shrinked DT repo
+			void 0;
 		}
-		else {
-			run(path.resolve(__dirname, '..', 'DefinitelyTyped-alt'));
-		}
+
+		var fs = require('fs');
+		var repoDir = path.join(__dirname, 'tmp');
+		fs.mkdirSync(repoDir);
+
+		var Git = require('git-wrapper');
+		var git = new Git({
+			'git-dir': path.join(repoDir, '.git')
+		});
+		var opts = {
+			depth: 20
+		};
+		var args = [
+			'https://github.com/borisyankov/DefinitelyTyped',
+			repoDir
+		];
+		console.log('cloning repos..');
+
+		git.exec('clone', opts, args, function (err, msg) {
+			console.log(msg);
+			if (err) {
+				done(err);
+			}
+			else {
+				run(repoDir);
+			}
+		});
 	});
 
 	grunt.registerTask('dev', [
