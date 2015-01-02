@@ -6,25 +6,25 @@
   "bundle": "typings/tsd.d.ts",
   "installed": {
     "node/node.d.ts": {
-      "commit": "0c62fe859756b82eafa4393a49e655b0882c9c83"
+      "commit": "9872b853d6facd11ab4eba733b2408e249d85082"
     },
     "bluebird/bluebird.d.ts": {
-      "commit": "68a0639b8e5af59b39aa8787827d1a07561c1a32"
+      "commit": "9872b853d6facd11ab4eba733b2408e249d85082"
     },
     "glob/glob.d.ts": {
-      "commit": "0c62fe859756b82eafa4393a49e655b0882c9c83"
+      "commit": "9872b853d6facd11ab4eba733b2408e249d85082"
     },
     "lazy.js/lazy.js.d.ts": {
-      "commit": "68a0639b8e5af59b39aa8787827d1a07561c1a32"
+      "commit": "9872b853d6facd11ab4eba733b2408e249d85082"
     },
     "optimist/optimist.d.ts": {
-      "commit": "68a0639b8e5af59b39aa8787827d1a07561c1a32"
+      "commit": "9872b853d6facd11ab4eba733b2408e249d85082"
     },
     "minimatch/minimatch.d.ts": {
-      "commit": "0c62fe859756b82eafa4393a49e655b0882c9c83"
+      "commit": "9872b853d6facd11ab4eba733b2408e249d85082"
     },
     "chalk/chalk.d.ts": {
-      "commit": "0c62fe859756b82eafa4393a49e655b0882c9c83"
+      "commit": "9872b853d6facd11ab4eba733b2408e249d85082"
     }
   }
 }

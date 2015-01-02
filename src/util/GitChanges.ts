@@ -22,7 +22,7 @@ class GitChanges {
 			if (!exists) {
 				throw new Error('cannot locate git-dir: ' + dir);
 			}
-			return new Promise<string[]>((resolve, reject) => {
+			return new Promise<string[]>((resolve: (result: string[]) => void, reject: (error: any) => void) => {
 				var args = ['--name-only HEAD~1'];
 				var opts = {};
 				var git = new Git({

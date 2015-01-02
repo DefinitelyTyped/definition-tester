@@ -13,7 +13,7 @@ export class ExecResult {
 }
 
 export function exec(filename: string, cmdLineArgs: string[]): Promise<ExecResult> {
-	return new Promise<ExecResult>((resolve, reject) => {
+	return new Promise<ExecResult>((resolve: (result: ExecResult) => void, reject: (error: any) => void) => {
 		var result = new ExecResult();
 		result.exitCode = null;
 

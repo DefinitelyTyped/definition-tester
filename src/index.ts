@@ -7,7 +7,6 @@ import opt = require('optimist');
 import Promise = require('bluebird');
 import findup = require('findup-sync');
 
-import Const = require('./Const');
 import util = require('./util/util');
 import TestRunner = require('./test/TestRunner');
 
@@ -15,9 +14,6 @@ var testerPkgPath = path.resolve(findup('package.json', {cwd: process.cwd()}));
 
 var optimist = opt(process.argv);
 optimist.boolean('single-thread');
-
-optimist.string('tsc-version');
-optimist.default('tsc-version', Const.DEFAULT_TSC_VERSION);
 
 optimist.boolean('changes');
 optimist.default('changes', false);
@@ -42,6 +38,14 @@ optimist.default('print-refmap', false);
 
 optimist.string('path');
 optimist.default('path', process.cwd());
+
+optimist.string('tsc-path');
+try {
+	var tscDir = path.dirname(require.resolve('typescript'));
+	var tscPath = path.join(tscDir, 'tsc.js');
+	optimist.default('tsc-path', tscPath);
+} catch (e) {
+}
 
 optimist.boolean('debug');
 optimist.describe('help', 'print help');
@@ -83,8 +87,7 @@ new TestRunner({
 	testerPath: util.fixPath(path.dirname(testerPkgPath)),
 	dtPath: dtPath,
 	concurrent: (argv['single-thread'] ? 1 : Math.round(cpuCores * .75)),
-	tscVersion: argv['tsc-version'] || Const.DEFAULT_TSC_VERSION,
-	tscPath: path.join(dtPath, '_infrastructure', 'tests', 'typescript'),
+	tscPath: argv['tsc-path'],
 	tslintConfig: path.join(path.dirname(testerPkgPath), 'conf', 'tslint.json'),
 
 	changes: (testFull ? false : argv['changes']),

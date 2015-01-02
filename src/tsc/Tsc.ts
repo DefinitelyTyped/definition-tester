@@ -6,8 +6,6 @@ import path = require('path');
 import Promise = require('bluebird');
 import findup = require('findup-sync');
 
-import Const = require('../Const');
-
 import exec = require('../util/exec');
 import util = require('../util/util');
 
@@ -16,8 +14,7 @@ import ITscExecOptions = require('./ITscExecOptions');
 class Tsc {
 
 	public static run(tsfile: string, options: ITscExecOptions): Promise<exec.ExecResult> {
-		var tscPath: string = path.join(options.tscPath, (options.tscVersion || Const.DEFAULT_TSC_VERSION), 'tsc.js');
-
+		var tscPath = options.tscPath;
 		if (typeof options.checkNoImplicitAny === 'undefined') {
 			options.checkNoImplicitAny = true;
 		}

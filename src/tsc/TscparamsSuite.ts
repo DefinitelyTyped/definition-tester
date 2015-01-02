@@ -51,8 +51,7 @@ class TsdparamsSuite extends TestSuiteBase {
 		this.print.clearCurrentLine().out(targetFile.filePathWithName);
 
 		return this.queue.run(new TscTest(this, targetFile, {
-			tscPath: this.options.tscVersion,
-			tscVersion: this.options.tscVersion,
+			tscPath: this.options.tscPath,
 			useTscParams: false,
 			checkNoImplicitAny: true
 		})).then((result) => {
