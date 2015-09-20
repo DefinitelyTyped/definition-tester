@@ -39,7 +39,7 @@ class TSLintSuite extends TestSuiteBase {
 			worker: require.resolve('./TSLintWorker'),
 			concurrent: this.options.concurrent,
 			paralel: 2,
-			attempt: 3
+			attempts: 3
 		});
 		return util.readJSON(this.options.tslintConfig).then((config) => {
 			this.tslint = {

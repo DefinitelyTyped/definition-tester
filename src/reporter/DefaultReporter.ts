@@ -2,7 +2,7 @@
 
 import ITestReporter = require('../reporter/ITestReporter');
 import TestResult = require('../test/TestResult');
-import Print = require('Print');
+import Print = require('./Print');
 
 /////////////////////////////////
 // Default test reporter

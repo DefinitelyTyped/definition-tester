@@ -41,9 +41,9 @@
   "dependencies": {
     "bluebird": "^2.5.3",
     "definition-header": "^0.1.0",
-    "findup-sync": "~0.2.1",
+    "findup-sync": "~0.3.0",
     "git-wrapper": "~0.1.1",
-    "glob": "^4.3.2",
+    "glob": "^5.0.14",
     "lazy.js": "~0.4.0",
     "manticore": "^0.2.4",
     "optimist": "~0.6.1"
@@ -51,14 +51,15 @@
   "devDependencies": {
     "grunt": "^0.4.5",
     "grunt-contrib-clean": "^0.6.0",
-    "grunt-contrib-jshint": "^0.10.0",
-    "grunt-ts": "^2.0.1",
+    "grunt-contrib-jshint": "^0.11.3",
+    "grunt-ts": "^4.2.0",
     "grunt-ts-clean": "^0.2.0",
-    "grunt-tslint": "^1.0.1",
+    "grunt-tslint": "^2.5.0",
+    "tslint": "^2.5.0",
     "jshint-path-reporter": "^0.1.3",
     "mocha-unfunk-reporter": "^0.4.0",
-    "source-map-support": "^0.2.7",
+    "source-map-support": "^0.3.2",
     "tslint-path-formatter": "^0.1.1",
-    "typescript": "^1.0.1"
+    "typescript": "^1.6.2"
   }
 }
