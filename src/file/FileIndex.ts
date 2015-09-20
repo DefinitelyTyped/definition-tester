@@ -32,7 +32,7 @@ class FileIndex {
 	}
 
 	private checkAcceptFile(fileName: string): boolean {
-		var ok = /\.ts$/.test(fileName) && /^[a-z]/i.test(fileName);
+		var ok = /\.tsx?$/.test(fileName) && /^[a-z]/i.test(fileName);
 		ok = ok && fileName.indexOf('_infrastructure/') < 0;
 		ok = ok && fileName.indexOf('node_modules/') < 0;
 		return ok;
@@ -62,7 +62,7 @@ class FileIndex {
 
 	public readIndex(): Promise<void> {
 		this.fileMap = Object.create(null);
-		return util.glob('**/*.ts', {
+		return util.glob('**/*.ts*(x)', {
 			cwd: this.options.dtPath
 		}).then((fileNames: string[]) => {
 			this.files = Lazy(fileNames).filter((fileName) => {
