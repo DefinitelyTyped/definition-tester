@@ -1,7 +1,7 @@
 /// <reference path='../_ref.d.ts' />
 
 import fs = require('fs');
-import Linter = require('tslint');
+import Lint = require('tslint');
 
 var longStr = '>----------------------------------------------------------------------';
 
@@ -16,7 +16,7 @@ function point(chars: number): string {
 
 export class Formatter {
 
-	public format(failures: Linter.RuleFailure[]): string {
+	public format(failures: Lint.RuleFailure[]): string {
 		var output: string[] = [];
 
 		if (failures.length > 0) {
@@ -34,12 +34,12 @@ export class Formatter {
 				var ruleName = failure.getRuleName();
 
 				var lineAndCharacter = failure.getStartPosition().getLineAndCharacter();
-				var line = lineAndCharacter.line() + 1;
-				var character = lineAndCharacter.character() + 1;
+				var line = lineAndCharacter.line + 1;
+				var character = lineAndCharacter.character + 1;
 
 				output.push('[' + ruleName + '] ' + failureString + ' at line ' + line + ', character ' + character + ':');
 				output.push('');
-				output.push(lines[lineAndCharacter.line()].replace(/\t/g, '    '));
+				output.push(lines[lineAndCharacter.line].replace(/\t/g, '    '));
 				output.push(point(character));
 				output.push('\n');
 			}

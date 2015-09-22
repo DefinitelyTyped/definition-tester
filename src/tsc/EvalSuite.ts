@@ -8,7 +8,7 @@ import File = require('../file/File');
 import ITestOptions = require('../test/ITestOptions');
 import TestSuiteBase = require('../suite/TestSuiteBase');
 
-var endTestDts = /\w-tests?\.ts$/i;
+var endTestDts = /\w-tests?\.tsx?$/i;
 
 /////////////////////////////////
 // Compile with *-tests.ts

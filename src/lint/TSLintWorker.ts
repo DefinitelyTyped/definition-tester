@@ -3,7 +3,7 @@
 import fs = require('fs');
 import path = require('path');
 
-import Linter = require('tslint');
+import Lint = require('tslint');
 
 import mc = require('manticore');
 
@@ -21,7 +21,7 @@ mc.registerTask(function lint(params: any, callback: (err: Error, res: any) => v
 				callback(err, null);
 				return;
 			}
-			var linter = new Linter(params.filePath, contents, params.options);
+			var linter = new Lint.Linter(params.filePath, contents, params.options);
 			var result = linter.lint();
 
 			result.output = result.output.split('\n').reduce((memo: string[], line: string) => {

@@ -12,6 +12,7 @@ import util = require('../util/util');
 import ITscExecOptions = require('./ITscExecOptions');
 
 class Tsc {
+	static useJsx = /\.tsx$/i;
 
 	public static run(tsfile: string, options: ITscExecOptions): Promise<exec.ExecResult> {
 		var tscPath = options.tscPath;
@@ -35,6 +36,9 @@ class Tsc {
 			return util.fileExists(tsfile + '.tscparams');
 		}).then(tsParamsExist => {
 			var command = 'node ' + tscPath + ' --module commonjs ';
+			if (Tsc.useJsx.test(tsfile)) {
+				command += '--jsx react ';
+			}
 			if (options.useTscParams && tsParamsExist) {
 				command += '@' + tsfile + '.tscparams';
 			}
