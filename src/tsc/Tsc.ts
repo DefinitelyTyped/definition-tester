@@ -13,6 +13,7 @@ import ITscExecOptions = require('./ITscExecOptions');
 
 class Tsc {
 	static useJsx = /\.tsx$/i;
+	static useEs6 = /\.es6\.tsx?$/i;
 
 	public static run(tsfile: string, options: ITscExecOptions): Promise<exec.ExecResult> {
 		var tscPath = options.tscPath;
@@ -38,6 +39,9 @@ class Tsc {
 			var command = 'node ' + tscPath + ' --module commonjs ';
 			if (Tsc.useJsx.test(tsfile)) {
 				command += '--jsx react ';
+			}
+			if (Tsc.useEs6.test(tsfile)) {
+				command += '--target es6 ';
 			}
 			if (options.useTscParams && tsParamsExist) {
 				command += '@' + tsfile + '.tscparams';
