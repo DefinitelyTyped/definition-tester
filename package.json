@@ -39,14 +39,14 @@
     "dt": "./bin/cli.js"
   },
   "dependencies": {
-    "bluebird": "^2.5.3",
+    "bluebird": "^2.10.1",
     "definition-header": "^0.1.0",
-    "findup-sync": "~0.3.0",
-    "git-wrapper": "~0.1.1",
+    "findup-sync": "^0.3.0",
+    "git-wrapper": "^0.1.1",
     "glob": "^5.0.14",
-    "lazy.js": "~0.4.0",
+    "lazy.js": "^0.4.2",
     "manticore": "^0.2.4",
-    "optimist": "~0.6.1"
+    "optimist": "^0.6.1"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
@@ -55,10 +55,10 @@
     "grunt-ts": "^4.2.0",
     "grunt-ts-clean": "^0.2.0",
     "grunt-tslint": "^2.5.0",
-    "tslint": "^2.5.0",
     "jshint-path-reporter": "^0.1.3",
     "mocha-unfunk-reporter": "^0.4.0",
     "source-map-support": "^0.3.2",
+    "tslint": "^2.5.0",
     "tslint-path-formatter": "^0.1.1",
     "typescript": "^1.6.2"
   }
