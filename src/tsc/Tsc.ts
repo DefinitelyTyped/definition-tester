@@ -1,20 +1,20 @@
 'use strict';
 
-import path = require('path');
-import Promise = require('bluebird');
-import findup = require('findup-sync');
+import * as path from 'path';
+import * as Promise from 'bluebird';
+import * as findup from 'findup-sync';
 
-import exec = require('../util/exec');
-import util = require('../util/util');
+import * as exec from '../util/exec';
+import * as util from '../util/util';
 
-import ITscExecOptions = require('./ITscExecOptions');
+import {ITscExecOptions} from './ITscExecOptions';
 
-class Tsc {
+export default class Tsc {
 	static useJsx = /\.tsx$/i;
 	static useEs6 = /\.es6\.tsx?$/i;
 
 	public static run(tsfile: string, options: ITscExecOptions): Promise<exec.ExecResult> {
-		var tscPath = options.tscPath;
+		let tscPath = options.tscPath;
 		if (typeof options.checkNoImplicitAny === 'undefined') {
 			options.checkNoImplicitAny = true;
 		}
@@ -34,7 +34,7 @@ class Tsc {
 			}
 			return util.fileExists(tsfile + '.tscparams');
 		}).then(tsParamsExist => {
-			var command = 'node ' + tscPath + ' --module commonjs ';
+			let command = 'node ' + tscPath + ' --module commonjs ';
 			if (Tsc.useJsx.test(tsfile)) {
 				command += '--jsx react ';
 			}
@@ -51,5 +51,3 @@ class Tsc {
 		});
 	}
 }
-
-export = Tsc;

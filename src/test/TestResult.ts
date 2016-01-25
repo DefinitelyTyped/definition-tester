@@ -1,13 +1,13 @@
 'use strict';
 
-import File = require('../file/File');
-import ITestSuite = require('../suite/ITestSuite');
-import ITscExecOptions = require('../tsc/ITscExecOptions');
+import File from '../file/File';
+import {ITestSuite} from '../suite/ITestSuite';
+import {ITscExecOptions} from '../tsc/ITscExecOptions';
 
 /////////////////////////////////
 // Test results
 /////////////////////////////////
-class TestResult {
+export default class TestResult {
 	hostedBy: ITestSuite;
 	targetFile: File;
 
@@ -20,5 +20,3 @@ class TestResult {
 		return this.exitCode === 0;
 	}
 }
-
-export = TestResult;

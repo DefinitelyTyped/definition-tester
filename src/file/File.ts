@@ -1,8 +1,8 @@
 'use strict';
 
-import path = require('path');
+import * as path from 'path';
 
-class File {
+export default class File {
 	baseDir: string;
 	filePathWithName: string;
 	dir: string;
@@ -25,5 +25,3 @@ class File {
 		return '[File ' + this.filePathWithName + ']';
 	}
 }
-
-export = File;

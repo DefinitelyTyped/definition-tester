@@ -1,9 +1,9 @@
 'use strict';
 
-import Promise = require('bluebird');
+import * as Promise from 'bluebird';
 
-import ITest = require('./ITest');
-import TestResult = require('./TestResult');
+import {ITest} from './ITest';
+import TestResult from './TestResult';
 
 class TestRunItem {
 
@@ -20,7 +20,7 @@ class TestRunItem {
 /////////////////////////////////
 // Parallel execute Tests
 /////////////////////////////////
-class TestQueue {
+export default class TestQueue {
 
 	private retries: TestRunItem[] = [];
 	private queue: TestRunItem[] = [];
@@ -36,7 +36,7 @@ class TestQueue {
 
 	// add to queue and return a promise
 	run(test: ITest): Promise<TestResult> {
-		var item = new TestRunItem(test);
+		let item = new TestRunItem(test);
 		this.queue.push(item);
 		this.check();
 		return item.defer.promise;
@@ -58,7 +58,7 @@ class TestQueue {
 	}
 
 	private step(): void {
-		var item = this.queue.pop();
+		let item = this.queue.pop();
 		item.attempts++;
 		item.test.run().then((res) => {
 			// see if we can retry
@@ -73,7 +73,7 @@ class TestQueue {
 		}).catch((err) => {
 			item.defer.reject(err);
 		}).finally(() => {
-			var i = this.active.indexOf(item);
+			let i = this.active.indexOf(item);
 			if (i > -1) {
 				this.active.splice(i, 1);
 			}
@@ -84,5 +84,3 @@ class TestQueue {
 		this.active.push(item);
 	}
 }
-
-export = TestQueue;

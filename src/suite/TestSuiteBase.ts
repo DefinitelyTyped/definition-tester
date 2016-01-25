@@ -1,25 +1,25 @@
 'use strict';
 
-import path = require('path');
-import Promise = require('bluebird');
+import * as path from 'path';
+import * as Promise from 'bluebird';
 
-import ITestSuite = require('./ITestSuite');
+import {ITestSuite} from './ITestSuite';
 
-import File = require('../file/File');
+import File from '../file/File';
 
-import Timer = require('../util/Timer');
+import Timer from '../util/Timer';
 
-import TscTest = require('../tsc/TscTest');
-import TestQueue = require('../test/TestQueue');
-import TestResult = require('../test/TestResult');
-import ITestOptions = require('../test/ITestOptions');
+import TscTest from '../tsc/TscTest';
+import TestQueue from '../test/TestQueue';
+import TestResult from '../test/TestResult';
+import {ITestOptions} from '../test/ITestOptions';
 
-import ITestReporter = require('../reporter/ITestReporter');
+import {ITestReporter} from '../reporter/ITestReporter';
 
 /////////////////////////////////
 // Base class for test suite
 /////////////////////////////////
-class TestSuiteBase implements ITestSuite {
+export default class TestSuiteBase implements ITestSuite {
 	testSuiteName: string;
 	errorHeadline: string;
 	options: ITestOptions;
@@ -78,5 +78,3 @@ class TestSuiteBase implements ITestSuite {
 		});
 	}
 }
-
-export = TestSuiteBase;

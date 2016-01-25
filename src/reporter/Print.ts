@@ -1,20 +1,20 @@
 'use strict';
 
-import os = require('os');
+import * as os from 'os';
 
-import File = require('../file/File');
-import FileDict = require('../file/IFileDict');
-import FileArrDict = require('../file/IFileArrDict');
-import FileIndex = require('../file/FileIndex');
+import File from '../file/File';
+import {IFileDict as FileDict} from '../file/IFileDict';
+import {IFileArrDict as FileArrDict} from '../file/IFileArrDict';
+import FileIndex from '../file/FileIndex';
 
-import TestResult = require('../test/TestResult');
-import ITestSuite = require('../suite/ITestSuite');
-import ITestOptions = require('../test/ITestOptions');
+import TestResult from '../test/TestResult';
+import {ITestSuite} from '../suite/ITestSuite';
+import {ITestOptions} from '../test/ITestOptions';
 
 /////////////////////////////////
 // All the common things that we print are functions of this class
 /////////////////////////////////
-class Print {
+export default class Print {
 
 	WIDTH = 77;
 
@@ -48,8 +48,8 @@ class Print {
 	}
 
 	public printHeader(options: ITestOptions) {
-		var totalMem = Math.round(os.totalmem() / 1024 / 1024) + ' mb';
-		var freemem = Math.round(os.freemem() / 1024 / 1024) + ' mb';
+		let totalMem = Math.round(os.totalmem() / 1024 / 1024) + ' mb';
+		let freemem = Math.round(os.freemem() / 1024 / 1024) + ' mb';
 
 		this.out('=============================================================================\n');
 		this.out('                    \x1B[36m\x1B[1mDefinitelyTyped Test Runner 0.5.0\x1B[0m\n');
@@ -65,8 +65,8 @@ class Print {
 	}
 
 	public printSuiteHeader(title: string) {
-		var left = Math.floor((this.WIDTH - title.length ) / 2) - 1;
-		var right = Math.ceil((this.WIDTH - title.length ) / 2) - 1;
+		let left = Math.floor((this.WIDTH - title.length ) / 2) - 1;
+		let right = Math.ceil((this.WIDTH - title.length ) / 2) - 1;
 		this.out(this.repeat('=', left)).out(' \x1B[34m\x1B[1m');
 		this.out(title);
 		this.out('\x1B[0m ').out(this.repeat('=', right)).printBreak();
@@ -116,12 +116,12 @@ class Print {
 	}
 
 	public printSuccessCount(current: number, total: number) {
-		var arb = (total === 0) ? 0 : (current / total);
+		let arb = (total === 0) ? 0 : (current / total);
 		this.out(' \x1B[36m\x1B[1mSuccessful      :\x1B[0m \x1B[32m\x1B[1m' + (arb * 100).toFixed(2) + '% (' + current + '/' + total + ')\x1B[0m\n');
 	}
 
 	public printFailedCount(current: number, total: number) {
-		var arb = (total === 0) ? 0 : (current / total);
+		let arb = (total === 0) ? 0 : (current / total);
 		this.out(' \x1B[36m\x1B[1mFailure         :\x1B[0m \x1B[31m\x1B[1m' + (arb * 100).toFixed(2) + '% (' + current + '/' + total + ')\x1B[0m\n');
 	}
 
@@ -138,7 +138,7 @@ class Print {
 	}
 
 	public printSuiteErrorCount(errorHeadline: string, current: number, total: number, warn: boolean = false) {
-		var arb = (total === 0) ? 0 : (current / total);
+		let arb = (total === 0) ? 0 : (current / total);
 		this.out(' \x1B[36m\x1B[1m').out(errorHeadline).out(this.repeat(' ', 16 - errorHeadline.length));
 		if (warn) {
 			this.out(': \x1B[31m\x1B[1m' + (arb * 100).toFixed(2) + '% (' + current + '/' + total + ')\x1B[0m\n');
@@ -184,7 +184,7 @@ class Print {
 	}
 
 	public printTestComplete(testResult: TestResult): void {
-		var reporter = testResult.hostedBy.testReporter;
+		let reporter = testResult.hostedBy.testReporter;
 		if (testResult.success) {
 			reporter.printPositiveCharacter(testResult);
 		}
@@ -207,7 +207,7 @@ class Print {
 		this.printSubHeader('Testing');
 		this.printDiv();
 
-		var keys = Object.keys(adding);
+		let keys = Object.keys(adding);
 		if (keys.length > 0) {
 			keys.sort().map((src) => {
 				this.printLine(adding[src].filePathWithName);
@@ -267,10 +267,10 @@ class Print {
 		this.printSubHeader('Missing references');
 		this.printDiv();
 
-		var keys = Object.keys(refMap);
+		let keys = Object.keys(refMap);
 		if (keys.length > 0) {
 			keys.sort().forEach((src) => {
-				var ref = index.getFile(src);
+				let ref = index.getFile(src);
 				this.printLine('\x1B[31m\x1B[1m' + ref.filePathWithName + '\x1B[0m');
 				refMap[src].forEach((file) => {
 					this.printElement(file.filePathWithName);
@@ -301,7 +301,7 @@ class Print {
 		this.printSubHeader('Interesting files');
 		this.printDiv();
 
-		var keys = Object.keys(changeMap);
+		let keys = Object.keys(changeMap);
 		if (keys.length > 0) {
 			keys.sort().forEach((src) => {
 				this.printLine(changeMap[src].filePathWithName);
@@ -317,7 +317,7 @@ class Print {
 		this.printSubHeader('Removed files');
 		this.printDiv();
 
-		var keys = Object.keys(changeMap);
+		let keys = Object.keys(changeMap);
 		if (keys.length > 0) {
 			keys.sort().forEach((src) => {
 				this.printLine(changeMap[src].filePathWithName);
@@ -333,10 +333,10 @@ class Print {
 		this.printSubHeader('Referring');
 		this.printDiv();
 
-		var keys = Object.keys(refMap);
+		let keys = Object.keys(refMap);
 		if (keys.length > 0) {
 			keys.sort().forEach((src) => {
-				var ref = index.getFile(src);
+				let ref = index.getFile(src);
 				this.printLine(ref.filePathWithName);
 				refMap[src].forEach((file) => {
 					this.printLine(' - ' + file.filePathWithName);
@@ -348,5 +348,3 @@ class Print {
 		}
 	}
 }
-
-export = Print;

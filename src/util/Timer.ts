@@ -4,7 +4,7 @@
 // Timer.start starts a timer
 // Timer.end stops the timer and sets asString to the pretty print value
 /////////////////////////////////
-class Timer {
+export default class Timer {
 	startTime: number;
 	time = 0;
 	asString: string = '<not-started>';
@@ -25,8 +25,8 @@ class Timer {
 	}
 
 	public static prettyDate(date1: number, date2: number): string {
-		var diff = ((date2 - date1) / 1000);
-		var day_diff = Math.floor(diff / 86400);
+		let diff = ((date2 - date1) / 1000);
+		let day_diff = Math.floor(diff / 86400);
 
 		if (isNaN(day_diff) || day_diff < 0 || day_diff >= 31) {
 			return null;
@@ -43,5 +43,3 @@ class Timer {
 		day_diff < 31 && Math.ceil(day_diff / 7) + ' weeks'));
 	}
 }
-
-export  = Timer;

@@ -1,22 +1,22 @@
 'use strict';
 
-import path = require('path');
-import Promise = require('bluebird');
-import DH = require('definition-header');
+import * as path from 'path';
+import * as Promise from 'bluebird';
+import * as DH from 'definition-header';
 
-import File = require('../file/File');
-import util = require('../util/util');
+import File from '../file/File';
+import * as util from '../util/util';
 
-import ITestOptions = require('../test/ITestOptions');
-import TestResult = require('../test/TestResult');
-import TestSuiteBase = require('../suite/TestSuiteBase');
+import {ITestOptions} from '../test/ITestOptions';
+import TestResult from '../test/TestResult';
+import TestSuiteBase from '../suite/TestSuiteBase';
 
-var isDef = /^[\w\.-]+[\\\/][\w\.-]+\.d\.ts$/;
+let isDef = /^[\w\.-]+[\\\/][\w\.-]+\.d\.ts$/;
 
 /////////////////////////////////
 // Compile with *-tests.ts
 /////////////////////////////////
-class HeaderSuite extends TestSuiteBase {
+export default class HeaderSuite extends TestSuiteBase {
 
 	constructor(options: ITestOptions) {
 		super(options, 'Header format', 'Invalid header');
@@ -30,7 +30,7 @@ class HeaderSuite extends TestSuiteBase {
 
 	public runTest(targetFile: File): Promise<TestResult> {
 		return util.readFile(targetFile.fullPath).then((content) => {
-			var testResult = new TestResult();
+			let testResult = new TestResult();
 			testResult.hostedBy = this;
 			testResult.targetFile = targetFile;
 
@@ -38,7 +38,7 @@ class HeaderSuite extends TestSuiteBase {
 				testResult.exitCode = 0;
 			}
 			else {
-				var result = DH.parse(content);
+				let result = DH.parse(content);
 				if (result.success) {
 					testResult.exitCode = 0;
 				}
@@ -54,5 +54,3 @@ class HeaderSuite extends TestSuiteBase {
 		});
 	}
 }
-
-export = HeaderSuite;

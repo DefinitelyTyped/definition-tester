@@ -1,7 +1,5 @@
-interface ITscExecOptions {
+export interface ITscExecOptions {
 	tscPath: string;
 	useTscParams?: boolean;
 	checkNoImplicitAny?: boolean;
 }
-
-export = ITscExecOptions;

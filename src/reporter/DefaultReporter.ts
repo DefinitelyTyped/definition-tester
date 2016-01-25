@@ -1,13 +1,13 @@
 'use strict';
 
-import ITestReporter = require('../reporter/ITestReporter');
-import TestResult = require('../test/TestResult');
-import Print = require('./Print');
+import {ITestReporter} from '../reporter/ITestReporter';
+import TestResult from '../test/TestResult';
+import Print from './Print';
 
 /////////////////////////////////
 // Default test reporter
 /////////////////////////////////
-class DefaultTestReporter implements ITestReporter {
+export default class DefaultTestReporter implements ITestReporter {
 
 	index = 0;
 
@@ -37,5 +37,3 @@ class DefaultTestReporter implements ITestReporter {
 		}
 	}
 }
-
-export = DefaultTestReporter;

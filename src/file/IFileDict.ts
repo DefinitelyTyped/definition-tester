@@ -1,7 +1,5 @@
-import File = require('./File');
+import File from './File';
 
-interface IFileDict {
+export interface IFileDict {
 	[fullPath: string]: File;
 }
-
-export = IFileDict;

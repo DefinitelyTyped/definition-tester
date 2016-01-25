@@ -1,19 +1,19 @@
 'use strict';
 
-import fs = require('fs');
-import Lazy = require('lazy.js');
-import Promise = require('bluebird');
-import globMod = require('glob');
+import * as fs from 'fs';
+import * as Lazy from 'lazy.js';
+import * as Promise from 'bluebird';
+import * as globMod from 'glob';
 
-var referenceTagExp = /\/\/\/[ \t]*<reference[ \t]*path=["']?([\w\.\/_-]*)["']?[ \t]*\/>/g;
+let referenceTagExp = /\/\/\/[ \t]*<reference[ \t]*path=["']?([\w\.\/_-]*)["']?[ \t]*\/>/g;
 
 export function endsWith(str: string, suffix: string) {
 	return str.indexOf(suffix, str.length - suffix.length) !== -1;
 }
 
 export function extractReferenceTags(source: string): string[] {
-	var ret: string[] = [];
-	var match: RegExpExecArray;
+	let ret: string[] = [];
+	let match: RegExpExecArray;
 
 	if (!referenceTagExp.global) {
 		throw new Error('referenceTagExp RegExp must have global flag');

@@ -1,17 +1,17 @@
 'use strict';
 
-import Promise = require('bluebird');
+import * as Promise from 'bluebird';
 
-import File = require('../file/File');
-import TestSuiteBase = require('../suite/TestSuiteBase');
-import ITestOptions = require('../test/ITestOptions');
+import File from '../file/File';
+import TestSuiteBase from '../suite/TestSuiteBase';
+import {ITestOptions} from '../test/ITestOptions';
 
-var endDts = /\w\.d\.ts$/;
+let endDts = /\w\.d\.ts$/;
 
 /////////////////////////////////
 // .d.ts syntax inspection
 /////////////////////////////////
-class SyntaxChecking extends TestSuiteBase {
+export default class SyntaxChecking extends TestSuiteBase {
 
 	constructor(options: ITestOptions) {
 		super(options, 'Syntax checking', 'Syntax error');
@@ -23,5 +23,3 @@ class SyntaxChecking extends TestSuiteBase {
 		}));
 	}
 }
-
-export = SyntaxChecking;

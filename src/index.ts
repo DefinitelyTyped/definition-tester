@@ -1,18 +1,18 @@
 'use strict';
 
-import os = require('os');
-import path = require('path');
+import * as os from 'os';
+import * as path from 'path';
 
-import opt = require('optimist');
-import Promise = require('bluebird');
-import findup = require('findup-sync');
+import * as opt from 'optimist';
+import * as Promise from 'bluebird';
+import * as findup from 'findup-sync';
 
-import util = require('./util/util');
-import TestRunner = require('./test/TestRunner');
+import * as util from './util/util';
+import TestRunner from './test/TestRunner';
 
-var testerPkgPath = path.resolve(findup('package.json', {cwd: process.cwd()}));
+let testerPkgPath = path.resolve(findup('package.json', {cwd: process.cwd()}));
 
-var optimist = opt(process.argv);
+let optimist = opt(process.argv);
 optimist.boolean('single-thread');
 
 optimist.boolean('changes');
@@ -41,8 +41,8 @@ optimist.default('path', process.cwd());
 
 optimist.string('tsc-path');
 try {
-	var tscDir = path.dirname(require.resolve('typescript'));
-	var tscPath = path.join(tscDir, 'tsc.js');
+	let tscDir = path.dirname(require.resolve('typescript'));
+	let tscPath = path.join(tscDir, 'tsc.js');
 	optimist.default('tsc-path', tscPath);
 } catch (e) {
 }
@@ -51,10 +51,10 @@ optimist.boolean('debug');
 optimist.describe('help', 'print help');
 optimist.alias('h', 'help');
 
-var argv: any = optimist.argv;
+let argv: any = optimist.argv;
 
 if (argv['debug']) {
-	var sms: any;
+	let sms: any;
 	try {
 		sms = require('source-map-support');
 	}
@@ -67,8 +67,8 @@ if (argv['debug']) {
 	Promise.longStackTraces();
 }
 
-var dtPath = util.fixPath(path.resolve(argv['path']));
-var cpuCores = os.cpus().length;
+let dtPath = util.fixPath(path.resolve(argv['path']));
+let cpuCores = os.cpus().length;
 
 if (argv.help) {
 	optimist.help();
@@ -81,7 +81,7 @@ Promise.onPossiblyUnhandledRejection((reason) => {
 	throw reason;
 });
 
-var testFull = (process.env['TRAVIS_BRANCH'] ? /\w\/full$/.test(process.env['TRAVIS_BRANCH']) : false);
+let testFull = (process.env['TRAVIS_BRANCH'] ? /\w\/full$/.test(process.env['TRAVIS_BRANCH']) : false);
 
 new TestRunner({
 	testerPath: util.fixPath(path.dirname(testerPkgPath)),

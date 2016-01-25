@@ -1,19 +1,19 @@
 'use strict';
 
-import File = require('../file/File');
-import exec = require('../util/exec');
+import File from '../file/File';
+import * as exec from '../util/exec';
 
-import ITest = require('../test/ITest');
-import TestResult = require('../test/TestResult');
-import ITscExecOptions = require('../tsc/ITscExecOptions');
-import ITestSuite = require('../suite/ITestSuite');
+import {ITest} from '../test/ITest';
+import TestResult from '../test/TestResult';
+import {ITscExecOptions} from '../tsc/ITscExecOptions';
+import {ITestSuite} from '../suite/ITestSuite';
 
-import Tsc = require('../tsc/Tsc');
+import Tsc from '../tsc/Tsc';
 
 /////////////////////////////////
 // Single test
 /////////////////////////////////
-class TscTest implements ITest {
+export default class TscTest implements ITest {
 	suite: ITestSuite;
 	tsfile: File;
 	options: ITscExecOptions;
@@ -26,7 +26,7 @@ class TscTest implements ITest {
 
 	public run(): Promise<TestResult> {
 		return Tsc.run(this.tsfile.fullPath, this.options).then((execResult: exec.ExecResult) => {
-			var testResult = new TestResult();
+			let testResult = new TestResult();
 			testResult.hostedBy = this.suite;
 			testResult.targetFile = this.tsfile;
 
@@ -38,5 +38,3 @@ class TscTest implements ITest {
 		});
 	}
 }
-
-export = TscTest;

@@ -1,17 +1,17 @@
 'use strict';
 
-import Promise = require('bluebird');
+import * as Promise from 'bluebird';
 
-import File = require('../file/File');
-import Timer = require('../util/Timer');
+import File from '../file/File';
+import Timer from '../util/Timer';
 
-import TestResult = require('../test/TestResult');
-import ITestReporter = require('../reporter/ITestReporter');
+import TestResult from '../test/TestResult';
+import {ITestReporter} from '../reporter/ITestReporter';
 
 /////////////////////////////////
 // The interface for test suite
 /////////////////////////////////
-interface ITestSuite {
+export interface ITestSuite {
 	testSuiteName: string;
 	errorHeadline: string;
 	filterTargetFiles(files: File[]): Promise<File[]>;
@@ -26,5 +26,3 @@ interface ITestSuite {
 	testReporter: ITestReporter;
 	printErrorCount: boolean;
 }
-
-export = ITestSuite;

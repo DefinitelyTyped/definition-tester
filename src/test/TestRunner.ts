@@ -1,38 +1,38 @@
 'use strict';
 
-import path = require('path');
-import fs = require('fs');
-import assert = require('assert');
+import * as path from 'path';
+import * as fs from 'fs';
+import * as assert from 'assert';
 
-import Lazy = require('lazy.js');
-import Promise = require('bluebird');
+import * as Lazy from 'lazy.js';
+import * as Promise from 'bluebird';
 
-import Print = require('../reporter/Print');
-import DefaultReporter = require('../reporter/DefaultReporter');
+import Print from '../reporter/Print';
+import DefaultReporter from '../reporter/DefaultReporter';
 
-import File = require('../file/File');
-import FileIndex = require('../file/FileIndex');
+import File from '../file/File';
+import FileIndex from '../file/FileIndex';
 
-import ITestOptions = require('./ITestOptions');
-import TestResult = require('./TestResult');
+import {ITestOptions} from './ITestOptions';
+import TestResult from './TestResult';
 
-import Timer = require('../util/Timer');
-import GitChanges = require('../util/GitChanges');
+import Timer from '../util/Timer';
+import GitChanges from '../util/GitChanges';
 
-import ITestSuite = require('../suite/ITestSuite');
+import {ITestSuite} from '../suite/ITestSuite';
 
-import EvalSuite = require('../tsc/EvalSuite');
-import SyntaxSuite = require('../tsc/SyntaxSuite');
-import TscparamsSuite = require('../tsc/TscparamsSuite');
+import EvalSuite from '../tsc/EvalSuite';
+import SyntaxSuite from '../tsc/SyntaxSuite';
+import TscparamsSuite from '../tsc/TscparamsSuite';
 
-import TSLintSuite = require('../lint/TSLintSuite');
+import TSLintSuite from '../lint/TSLintSuite';
 
-import HeaderSuite = require('../header/HeaderSuite');
+import HeaderSuite from '../header/HeaderSuite';
 
 /////////////////////////////////
 // The main class to kick things off
 /////////////////////////////////
-class TestRunner {
+export default class TestRunner {
 	public options: ITestOptions;
 
 	private timer: Timer;
@@ -197,7 +197,7 @@ class TestRunner {
 	}
 
 	private finaliseTests(files: File[]): void {
-		var testEval: EvalSuite = Lazy(this.suites).filter((suite) => {
+		let testEval: EvalSuite = Lazy(this.suites).filter((suite) => {
 			return (suite instanceof EvalSuite);
 		}).first();
 
@@ -256,5 +256,3 @@ class TestRunner {
 		}
 	}
 }
-
-export = TestRunner;

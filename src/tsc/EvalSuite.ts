@@ -1,17 +1,17 @@
 'use strict';
 
-import Promise = require('bluebird');
+import * as Promise from 'bluebird';
 
-import File = require('../file/File');
-import ITestOptions = require('../test/ITestOptions');
-import TestSuiteBase = require('../suite/TestSuiteBase');
+import File from '../file/File';
+import {ITestOptions} from '../test/ITestOptions';
+import TestSuiteBase from '../suite/TestSuiteBase';
 
-var endTestDts = /\w-tests?(\.es6)?\.tsx?$/i;
+let endTestDts = /\w-tests?(\.es6)?\.tsx?$/i;
 
 /////////////////////////////////
 // Compile with *-tests.ts
 /////////////////////////////////
-class TestEval extends TestSuiteBase {
+export default class TestEval extends TestSuiteBase {
 
 	constructor(options: ITestOptions) {
 		super(options, 'Typing tests', 'Failed tests');
@@ -23,5 +23,3 @@ class TestEval extends TestSuiteBase {
 		}));
 	}
 }
-
-export = TestEval;

@@ -1,7 +1,5 @@
-import File = require('./File');
+import File from './File';
 
-interface IFileArrDict {
+export interface IFileArrDict {
 	[fullPath: string]: File[];
 }
-
-export = IFileArrDict;
