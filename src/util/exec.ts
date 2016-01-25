@@ -1,6 +1,4 @@
-﻿/// <reference path="../_ref.d.ts" />
-
-'use strict';
+﻿'use strict';
 
 import Promise = require('bluebird');
 import child_process = require('child_process');

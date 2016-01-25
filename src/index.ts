@@ -1,4 +1,4 @@
-/// <reference path="_ref.d.ts" />
+'use strict';
 
 import os = require('os');
 import path = require('path');

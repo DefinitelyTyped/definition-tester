@@ -1,4 +1,4 @@
-/// <reference path="../_ref.d.ts" />
+'use strict';
 
 import File = require('../file/File');
 import exec = require('../util/exec');

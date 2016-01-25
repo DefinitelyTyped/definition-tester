@@ -7,48 +7,26 @@ module.exports = function (grunt) {
 	var childProcess = require('child_process');
 
 	grunt.loadNpmTasks('grunt-ts');
-	grunt.loadNpmTasks('grunt-ts-clean');
 	grunt.loadNpmTasks('grunt-tslint');
-	grunt.loadNpmTasks('grunt-contrib-jshint');
 	grunt.loadNpmTasks('grunt-contrib-clean');
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
-		jshint: {
-			options: grunt.util._.extend(grunt.file.readJSON('.jshintrc'), {
-				reporter: './node_modules/jshint-path-reporter'
-			}),
-			support: {
-				options: {
-					node: true
-				},
-				src: ['Gruntfile.js']
-			}
-		},
 		tslint: {
 			options: {
-				configuration: grunt.file.readJSON('tslint.json'),
-				formatter: 'tslint-path-formatter'
+				configuration: grunt.file.readJSON('tslint.json')
 			},
 			src: ['src/**/*.ts'],
 			test: ['test/src/**/*.ts']
 		},
-		ts_clean: {
-			dist: {
-				options: {
-					verbose: false
-				},
-				src: ['dist/**/*'],
-				dot: true
-			}
-		},
 		clean: {
 			cruft: [
-				'tscommand-*.tmp.txt',
-				'dist/.baseDir*'
+				'tscommand-*.tmp.txt'
 			],
 			dist: [
-				'dist/**/*'
+				'src/**/*.js',
+				'src/**/*.js.map',
+				'src/**/*.d.ts',
 			],
 			tmp: {
 				dot: true,
@@ -61,21 +39,11 @@ module.exports = function (grunt) {
 			]
 		},
 		ts: {
-			options: {
-				fast: 'never',
-				target: 'es5',
-				module: 'commonjs',
-				sourceMap: true,
-				declaration: true,
-				comments: true,
-				verbose: false
-			},
-			build: {
-				options: {
-					noImplicitAny: true
-				},
-				src: ['src/**/*.ts'],
-				outDir: 'dist/'
+			default: {
+				tsconfig: {
+					tsconfig: "./tsconfig.json",
+					updateFiles:false
+				}
 			}
 		},
 		exec: {
@@ -95,7 +63,7 @@ module.exports = function (grunt) {
 
 		var run = function (target) {
 			var args = [];
-			args.push(path.resolve(__dirname, 'dist', 'index.js'));
+			args.push(path.resolve(__dirname, 'src', 'index.js'));
 			if (options.tests) {
 				args.push('--tests');
 			}
@@ -154,7 +122,7 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('dev', [
 		'prep',
-		'ts:build',
+		'ts',
 		'exec'
 	]);
 
@@ -166,13 +134,12 @@ module.exports = function (grunt) {
 	grunt.registerTask('prep', [
 		'clean:tmp',
 		'clean:dist',
-		'clean:cruft',
-		'jshint:support'
+		'clean:cruft'
 	]);
 
 	grunt.registerTask('compile', [
 		'prep',
-		'ts:build',
+		'ts',
 		'tslint:src'
 	]);
 

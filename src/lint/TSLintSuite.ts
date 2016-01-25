@@ -1,5 +1,3 @@
-/// <reference path="../_ref.d.ts" />
-
 'use strict';
 
 import path = require('path');
@@ -44,7 +42,7 @@ class TSLintSuite extends TestSuiteBase {
 		return util.readJSON(this.options.tslintConfig).then((config) => {
 			this.tslint = {
 				configuration: config,
-				formatter: path.resolve(this.options.testerPath, 'dist', 'lint', 'TSLintFormatter')
+				formatter: path.resolve(this.options.testerPath, 'src', 'lint', 'TSLintFormatter')
 			};
 			return super.start(targetFiles, testCallback);
 		});

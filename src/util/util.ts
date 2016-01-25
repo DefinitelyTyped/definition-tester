@@ -1,5 +1,3 @@
-/// <reference path="../_ref.d.ts" />
-
 'use strict';
 
 import fs = require('fs');

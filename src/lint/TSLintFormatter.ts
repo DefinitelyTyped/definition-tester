@@ -1,7 +1,8 @@
-/// <reference path='../_ref.d.ts' />
+'use strict';
 
 import fs = require('fs');
 import Lint = require('tslint');
+import {RuleFailure} from 'tslint/lib/language/rule/rule';
 
 var longStr = '>----------------------------------------------------------------------';
 
@@ -16,7 +17,7 @@ function point(chars: number): string {
 
 export class Formatter {
 
-	public format(failures: Lint.RuleFailure[]): string {
+	public format(failures: RuleFailure[]): string {
 		var output: string[] = [];
 
 		if (failures.length > 0) {

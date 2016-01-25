@@ -1,0 +1,44 @@
+{
+  "repos": [
+    {
+      "url": "https://github.com/DefinitelyTyped/DefinitelyTyped.git",
+      "ref": "master"
+    }
+  ],
+  "path": "typings",
+  "bundle": "typings/bundle.d.ts",
+  "link": {
+    "npm": {
+      "include": true
+    }
+  },
+  "dependencies": {
+    "node/node.d.ts": {
+      "ref": "5e269cec94f666c298625948c5c5ff8224846e33"
+    },
+    "bluebird/bluebird.d.ts": {
+      "ref": "5e269cec94f666c298625948c5c5ff8224846e33"
+    },
+    "glob/glob.d.ts": {
+      "ref": "5e269cec94f666c298625948c5c5ff8224846e33"
+    },
+    "lazy.js/lazy.js.d.ts": {
+      "ref": "5e269cec94f666c298625948c5c5ff8224846e33"
+    },
+    "optimist/optimist.d.ts": {
+      "ref": "5e269cec94f666c298625948c5c5ff8224846e33"
+    },
+    "parsimmon/parsimmon.d.ts": {
+      "ref": "5e269cec94f666c298625948c5c5ff8224846e33"
+    },
+    "minimatch/minimatch.d.ts": {
+      "ref": "5e269cec94f666c298625948c5c5ff8224846e33"
+    },
+    "chalk/chalk.d.ts": {
+      "ref": "5e269cec94f666c298625948c5c5ff8224846e33"
+    },
+    "findup-sync/findup-sync.d.ts": {
+      "ref": "5e269cec94f666c298625948c5c5ff8224846e33"
+    }
+  }
+}
