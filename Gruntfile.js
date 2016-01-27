@@ -154,8 +154,7 @@ module.exports = function (grunt) {
 	]);
 
 	grunt.registerTask('prepublish', [
-		'build',
-		'ts_clean:dist'
+		'build'
 	]);
 
 	grunt.registerTask('sweep', [
