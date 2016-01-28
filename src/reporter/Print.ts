@@ -1,20 +1,20 @@
-/// <reference path="../_ref.d.ts" />
+'use strict';
 
-import os = require('os');
+import * as os from 'os';
 
-import File = require('../file/File');
-import FileDict = require('../file/IFileDict');
-import FileArrDict = require('../file/IFileArrDict');
-import FileIndex = require('../file/FileIndex');
+import File from '../file/File';
+import {IFileDict as FileDict} from '../file/IFileDict';
+import {IFileArrDict as FileArrDict} from '../file/IFileArrDict';
+import FileIndex from '../file/FileIndex';
 
-import TestResult = require('../test/TestResult');
-import ITestSuite = require('../suite/ITestSuite');
-import ITestOptions = require('../test/ITestOptions');
+import TestResult from '../test/TestResult';
+import {ITestSuite} from '../suite/ITestSuite';
+import {ITestOptions} from '../test/ITestOptions';
 
 /////////////////////////////////
 // All the common things that we print are functions of this class
 /////////////////////////////////
-class Print {
+export default class Print {
 
 	WIDTH = 77;
 
@@ -43,33 +43,33 @@ class Print {
 
 	public printChangeHeader() {
 		this.out('=============================================================================\n');
-		this.out('                    \33[36m\33[1mDefinitelyTyped Diff Detector 0.1.0\33[0m \n');
+		this.out('                    \x1B[36m\x1B[1mDefinitelyTyped Diff Detector 0.1.0\x1B[0m \n');
 		this.out('=============================================================================\n');
 	}
 
 	public printHeader(options: ITestOptions) {
-		var totalMem = Math.round(os.totalmem() / 1024 / 1024) + ' mb';
-		var freemem = Math.round(os.freemem() / 1024 / 1024) + ' mb';
+		let totalMem = Math.round(os.totalmem() / 1024 / 1024) + ' mb';
+		let freemem = Math.round(os.freemem() / 1024 / 1024) + ' mb';
 
 		this.out('=============================================================================\n');
-		this.out('                    \33[36m\33[1mDefinitelyTyped Test Runner 0.5.0\33[0m\n');
+		this.out('                    \x1B[36m\x1B[1mDefinitelyTyped Test Runner 0.5.0\x1B[0m\n');
 		this.out('=============================================================================\n');
-		this.out(' \33[36m\33[1mTypescript version:\33[0m ' + this.version + '\n');
-		this.out(' \33[36m\33[1mTypings           :\33[0m ' + this.typings + '\n');
-		this.out(' \33[36m\33[1mTests             :\33[0m ' + this.tests + '\n');
-		this.out(' \33[36m\33[1mTypeScript files  :\33[0m ' + this.tsFiles + '\n');
-		this.out(' \33[36m\33[1mTotal Memory      :\33[0m ' + totalMem + '\n');
-		this.out(' \33[36m\33[1mFree Memory       :\33[0m ' + freemem + '\n');
-		this.out(' \33[36m\33[1mCores             :\33[0m ' + os.cpus().length + '\n');
-		this.out(' \33[36m\33[1mConcurrent        :\33[0m ' + options.concurrent + '\n');
+		this.out(' \x1B[36m\x1B[1mTypescript version:\x1B[0m ' + this.version + '\n');
+		this.out(' \x1B[36m\x1B[1mTypings           :\x1B[0m ' + this.typings + '\n');
+		this.out(' \x1B[36m\x1B[1mTests             :\x1B[0m ' + this.tests + '\n');
+		this.out(' \x1B[36m\x1B[1mTypeScript files  :\x1B[0m ' + this.tsFiles + '\n');
+		this.out(' \x1B[36m\x1B[1mTotal Memory      :\x1B[0m ' + totalMem + '\n');
+		this.out(' \x1B[36m\x1B[1mFree Memory       :\x1B[0m ' + freemem + '\n');
+		this.out(' \x1B[36m\x1B[1mCores             :\x1B[0m ' + os.cpus().length + '\n');
+		this.out(' \x1B[36m\x1B[1mConcurrent        :\x1B[0m ' + options.concurrent + '\n');
 	}
 
 	public printSuiteHeader(title: string) {
-		var left = Math.floor((this.WIDTH - title.length ) / 2) - 1;
-		var right = Math.ceil((this.WIDTH - title.length ) / 2) - 1;
-		this.out(this.repeat('=', left)).out(' \33[34m\33[1m');
+		let left = Math.floor((this.WIDTH - title.length ) / 2) - 1;
+		let right = Math.ceil((this.WIDTH - title.length ) / 2) - 1;
+		this.out(this.repeat('=', left)).out(' \x1B[34m\x1B[1m');
 		this.out(title);
-		this.out('\33[0m ').out(this.repeat('=', right)).printBreak();
+		this.out('\x1B[0m ').out(this.repeat('=', right)).printBreak();
 	}
 
 	public printDiv() {
@@ -82,7 +82,7 @@ class Print {
 
 	public printErrorsHeader() {
 		this.out('=============================================================================\n');
-		this.out('                    \33[34m\33[1mErrors in files\33[0m \n');
+		this.out('                    \x1B[34m\x1B[1mErrors in files\x1B[0m \n');
 		this.out('=============================================================================\n');
 	}
 
@@ -111,49 +111,49 @@ class Print {
 	}
 
 	public clearCurrentLine(): Print {
-		this.out('\r\33[K');
+		this.out('\r\x1B[K');
 		return this;
 	}
 
 	public printSuccessCount(current: number, total: number) {
-		var arb = (total === 0) ? 0 : (current / total);
-		this.out(' \33[36m\33[1mSuccessful      :\33[0m \33[32m\33[1m' + (arb * 100).toFixed(2) + '% (' + current + '/' + total + ')\33[0m\n');
+		let arb = (total === 0) ? 0 : (current / total);
+		this.out(' \x1B[36m\x1B[1mSuccessful      :\x1B[0m \x1B[32m\x1B[1m' + (arb * 100).toFixed(2) + '% (' + current + '/' + total + ')\x1B[0m\n');
 	}
 
 	public printFailedCount(current: number, total: number) {
-		var arb = (total === 0) ? 0 : (current / total);
-		this.out(' \33[36m\33[1mFailure         :\33[0m \33[31m\33[1m' + (arb * 100).toFixed(2) + '% (' + current + '/' + total + ')\33[0m\n');
+		let arb = (total === 0) ? 0 : (current / total);
+		this.out(' \x1B[36m\x1B[1mFailure         :\x1B[0m \x1B[31m\x1B[1m' + (arb * 100).toFixed(2) + '% (' + current + '/' + total + ')\x1B[0m\n');
 	}
 
 	public printTypingsWithoutTestsMessage() {
-		this.out(' \33[36m\33[1mTyping without tests\33[0m\n');
+		this.out(' \x1B[36m\x1B[1mTyping without tests\x1B[0m\n');
 	}
 
 	public printTotalMessage() {
-		this.out(' \33[36m\33[1mTotal\33[0m\n');
+		this.out(' \x1B[36m\x1B[1mTotal\x1B[0m\n');
 	}
 
 	public printElapsedTime(time: string, s: number) {
-		this.out(' \33[36m\33[1mElapsed time    :\33[0m ~' + time + ' (' + s + 's)\n');
+		this.out(' \x1B[36m\x1B[1mElapsed time    :\x1B[0m ~' + time + ' (' + s + 's)\n');
 	}
 
 	public printSuiteErrorCount(errorHeadline: string, current: number, total: number, warn: boolean = false) {
-		var arb = (total === 0) ? 0 : (current / total);
-		this.out(' \33[36m\33[1m').out(errorHeadline).out(this.repeat(' ', 16 - errorHeadline.length));
+		let arb = (total === 0) ? 0 : (current / total);
+		this.out(' \x1B[36m\x1B[1m').out(errorHeadline).out(this.repeat(' ', 16 - errorHeadline.length));
 		if (warn) {
-			this.out(': \33[31m\33[1m' + (arb * 100).toFixed(2) + '% (' + current + '/' + total + ')\33[0m\n');
+			this.out(': \x1B[31m\x1B[1m' + (arb * 100).toFixed(2) + '% (' + current + '/' + total + ')\x1B[0m\n');
 		}
 		else {
-			this.out(': \33[33m\33[1m' + (arb * 100).toFixed(2) + '% (' + current + '/' + total + ')\33[0m\n');
+			this.out(': \x1B[33m\x1B[1m' + (arb * 100).toFixed(2) + '% (' + current + '/' + total + ')\x1B[0m\n');
 		}
 	}
 
 	public printSubHeader(file: string) {
-		this.out(' \33[36m\33[1m' + file + '\33[0m\n');
+		this.out(' \x1B[36m\x1B[1m' + file + '\x1B[0m\n');
 	}
 
 	public printWarnCode(str: string) {
-		this.out(' \33[31m\33[1m<' + str.toLowerCase().replace(/ +/g, '-') + '>\33[0m\n');
+		this.out(' \x1B[31m\x1B[1m<' + str.toLowerCase().replace(/ +/g, '-') + '>\x1B[0m\n');
 	}
 
 	public printLine(file: string) {
@@ -169,7 +169,7 @@ class Print {
 	}
 
 	public printTypingsWithoutTestName(file: string) {
-		this.out(' - \33[33m\33[1m' + file + '\33[0m\n');
+		this.out(' - \x1B[33m\x1B[1m' + file + '\x1B[0m\n');
 	}
 
 	public printTypingsWithoutTest(withoutTestTypings: string[]) {
@@ -184,7 +184,7 @@ class Print {
 	}
 
 	public printTestComplete(testResult: TestResult): void {
-		var reporter = testResult.hostedBy.testReporter;
+		let reporter = testResult.hostedBy.testReporter;
 		if (testResult.success) {
 			reporter.printPositiveCharacter(testResult);
 		}
@@ -207,7 +207,7 @@ class Print {
 		this.printSubHeader('Testing');
 		this.printDiv();
 
-		var keys = Object.keys(adding);
+		let keys = Object.keys(adding);
 		if (keys.length > 0) {
 			keys.sort().map((src) => {
 				this.printLine(adding[src].filePathWithName);
@@ -267,11 +267,11 @@ class Print {
 		this.printSubHeader('Missing references');
 		this.printDiv();
 
-		var keys = Object.keys(refMap);
+		let keys = Object.keys(refMap);
 		if (keys.length > 0) {
 			keys.sort().forEach((src) => {
-				var ref = index.getFile(src);
-				this.printLine('\33[31m\33[1m' + ref.filePathWithName + '\33[0m');
+				let ref = index.getFile(src);
+				this.printLine('\x1B[31m\x1B[1m' + ref.filePathWithName + '\x1B[0m');
 				refMap[src].forEach((file) => {
 					this.printElement(file.filePathWithName);
 				});
@@ -301,7 +301,7 @@ class Print {
 		this.printSubHeader('Interesting files');
 		this.printDiv();
 
-		var keys = Object.keys(changeMap);
+		let keys = Object.keys(changeMap);
 		if (keys.length > 0) {
 			keys.sort().forEach((src) => {
 				this.printLine(changeMap[src].filePathWithName);
@@ -317,7 +317,7 @@ class Print {
 		this.printSubHeader('Removed files');
 		this.printDiv();
 
-		var keys = Object.keys(changeMap);
+		let keys = Object.keys(changeMap);
 		if (keys.length > 0) {
 			keys.sort().forEach((src) => {
 				this.printLine(changeMap[src].filePathWithName);
@@ -333,10 +333,10 @@ class Print {
 		this.printSubHeader('Referring');
 		this.printDiv();
 
-		var keys = Object.keys(refMap);
+		let keys = Object.keys(refMap);
 		if (keys.length > 0) {
 			keys.sort().forEach((src) => {
-				var ref = index.getFile(src);
+				let ref = index.getFile(src);
 				this.printLine(ref.filePathWithName);
 				refMap[src].forEach((file) => {
 					this.printLine(' - ' + file.filePathWithName);
@@ -348,5 +348,3 @@ class Print {
 		}
 	}
 }
-
-export = Print;

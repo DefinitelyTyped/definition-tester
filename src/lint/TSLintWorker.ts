@@ -1,11 +1,11 @@
 'use strict';
 
-import fs = require('fs');
-import path = require('path');
+import * as fs from 'fs';
+import * as path from 'path';
 
-import Lint = require('tslint');
+import * as Linter from 'tslint';
 
-import mc = require('manticore');
+import * as mc from 'manticore';
 
 mc.registerTask(function lint(params: any, callback: (err: Error, res: any) => void) {
 	mc.assertType(params, 'object', 'params');
@@ -21,8 +21,8 @@ mc.registerTask(function lint(params: any, callback: (err: Error, res: any) => v
 				callback(err, null);
 				return;
 			}
-			var linter = new Lint.Linter(params.filePath, contents, params.options);
-			var result = linter.lint();
+			let linter = new Linter(params.filePath, contents, params.options);
+			let result = linter.lint();
 
 			result.output = result.output.split('\n').reduce((memo: string[], line: string) => {
 				if (line !== '') {

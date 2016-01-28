@@ -1,23 +1,21 @@
-/// <reference path="../_ref.d.ts" />
-
 'use strict';
 
-import path = require('path');
-import Lazy = require('lazy.js');
-import Promise = require('bluebird');
+import * as path from 'path';
+import * as Lazy from 'lazy.js';
+import * as Promise from 'bluebird';
 
-import util = require('../util/util');
+import * as util from '../util/util';
 
-import File = require('./File');
-import IFileDict = require('./IFileDict');
-import IFileArrDict = require('./IFileArrDict');
+import File from './File';
+import {IFileDict} from './IFileDict';
+import {IFileArrDict} from './IFileArrDict';
 
-import ITestOptions = require('../test/ITestOptions');
+import {ITestOptions} from '../test/ITestOptions';
 
 /////////////////////////////////
 // Track all files in the repo: map full path to File objects
 /////////////////////////////////
-class FileIndex {
+export default class FileIndex {
 
 	files: File[];
 	fileMap: IFileDict;
@@ -32,7 +30,7 @@ class FileIndex {
 	}
 
 	private checkAcceptFile(fileName: string): boolean {
-		var ok = /\.tsx?$/.test(fileName) && /^[a-z]/i.test(fileName);
+		let ok = /\.tsx?$/.test(fileName) && /^[a-z]/i.test(fileName);
 		ok = ok && fileName.indexOf('_infrastructure/') < 0;
 		ok = ok && fileName.indexOf('node_modules/') < 0;
 		return ok;
@@ -68,7 +66,7 @@ class FileIndex {
 			this.files = Lazy(fileNames).filter((fileName) => {
 				return this.checkAcceptFile(fileName);
 			}).map((fileName: string) => {
-				var file = new File(this.options.dtPath, fileName);
+				let file = new File(this.options.dtPath, fileName);
 				this.fileMap[file.fullPath] = file;
 				return file;
 			}).toArray();
@@ -84,8 +82,8 @@ class FileIndex {
 			Lazy(changes).filter((full) => {
 				return this.checkAcceptFile(full);
 			}).uniq().each((local) => {
-				var full = util.fixPath(path.resolve(this.options.dtPath, local));
-				var file = this.getFile(full);
+				let full = util.fixPath(path.resolve(this.options.dtPath, local));
+				let file = this.getFile(full);
 				if (!file) {
 					// TODO figure out what to do here
 					// what does it mean? deleted?
@@ -121,17 +119,17 @@ class FileIndex {
 
 	private loadReferences(files: File[]): Promise<void> {
 		return new Promise<void>((resolve, reject) => {
-			var queue = files.slice(0);
-			var active: File[] = [];
-			var max = 50;
-			var next = () => {
+			let queue = files.slice(0);
+			let active: File[] = [];
+			let max = 50;
+			let next = () => {
 				if (queue.length === 0 && active.length === 0) {
 					resolve(null);
 					return;
 				}
 				// queue parallel
 				while (queue.length > 0 && active.length < max) {
-					var file = queue.pop();
+					let file = queue.pop();
 					active.push(file);
 					this.parseFile(file).then((file) => {
 						active.splice(active.indexOf(file), 1);
@@ -194,19 +192,19 @@ class FileIndex {
 			//    - add to result
 			//    - from refMap queue all files referring to current
 
-			var result: IFileDict = Object.create(null);
-			var queue = Lazy<File>(this.changed).values().toArray();
+			let result: IFileDict = Object.create(null);
+			let queue = Lazy<File>(this.changed).values().toArray();
 
 			while (queue.length > 0) {
-				var next = queue.shift();
-				var fp = next.fullPath;
+				let next = queue.shift();
+				let fp = next.fullPath;
 				if (result[fp]) {
 					continue;
 				}
 				result[fp] = next;
 				if (fp in this.refMap) {
-					var arr = this.refMap[fp];
-					for (var i = 0, ii = arr.length; i < ii; i++) {
+					let arr = this.refMap[fp];
+					for (let i = 0, ii = arr.length; i < ii; i++) {
 						// just add it and skip expensive checks
 						queue.push(arr[i]);
 					}
@@ -216,5 +214,3 @@ class FileIndex {
 		});
 	}
 }
-
-export = FileIndex;

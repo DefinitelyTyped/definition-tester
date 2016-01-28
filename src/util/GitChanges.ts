@@ -1,13 +1,11 @@
-/// <reference path="../_ref.d.ts" />
-
 'use strict';
 
-import path = require('path');
-import Git = require('git-wrapper');
-import Promise = require('bluebird');
-import util = require('./util');
+import * as path from 'path';
+import * as Git from 'git-wrapper';
+import * as Promise from 'bluebird';
+import * as util from './util';
 
-class GitChanges {
+export default class GitChanges {
 
 	private dtPath: string;
 
@@ -16,16 +14,16 @@ class GitChanges {
 	}
 
 	public readChanges(): Promise<string[]> {
-		var dir = path.join(this.dtPath, '.git');
+		let dir = path.join(this.dtPath, '.git');
 
 		return util.fileExists(dir).then((exists) => {
 			if (!exists) {
 				throw new Error('cannot locate git-dir: ' + dir);
 			}
 			return new Promise<string[]>((resolve: (result: string[]) => void, reject: (error: any) => void) => {
-				var args = ['--name-only HEAD~1'];
-				var opts = {};
-				var git = new Git({
+				let args = ['--name-only HEAD~1'];
+				let opts = {};
+				let git = new Git({
 					'git-dir': dir
 				});
 				git.exec('diff', opts, args, (err: Error, msg: string) => {
@@ -40,5 +38,3 @@ class GitChanges {
 		});
 	}
 }
-
-export = GitChanges;

@@ -1,9 +1,7 @@
-﻿/// <reference path="../_ref.d.ts" />
+﻿'use strict';
 
-'use strict';
-
-import Promise = require('bluebird');
-import child_process = require('child_process');
+import * as Promise from 'bluebird';
+import * as child_process from 'child_process';
 
 export class ExecResult {
 	error: Error;
@@ -14,12 +12,12 @@ export class ExecResult {
 
 export function exec(filename: string, cmdLineArgs: string[]): Promise<ExecResult> {
 	return new Promise<ExecResult>((resolve: (result: ExecResult) => void, reject: (error: any) => void) => {
-		var result = new ExecResult();
+		let result = new ExecResult();
 		result.exitCode = null;
 
-		var cmdLine = filename + ' ' + cmdLineArgs.join(' ');
+		let cmdLine = filename + ' ' + cmdLineArgs.join(' ');
 
-		var cp = child_process.exec(cmdLine, {maxBuffer: 1 * 1024 * 1024}, (error: ErrorCode, stdout: Buffer, stderr: Buffer) => {
+		let cp = child_process.exec(cmdLine, {maxBuffer: 1 * 1024 * 1024}, (error: ErrorCode, stdout: Buffer, stderr: Buffer) => {
 			result.error = error;
 			result.stdout = String(stdout);
 			result.stderr = String(stderr);

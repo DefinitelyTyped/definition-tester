@@ -1,8 +1,6 @@
-import Promise = require('bluebird');
-import TestResult = require('./TestResult');
+import * as Promise from 'bluebird';
+import TestResult from './TestResult';
 
-interface ITest {
+export interface ITest {
 	run(): Promise<TestResult>;
 }
-
-export = ITest;

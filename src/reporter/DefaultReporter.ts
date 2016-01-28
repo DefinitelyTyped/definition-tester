@@ -1,13 +1,13 @@
-/// <reference path="../_ref.d.ts" />
+'use strict';
 
-import ITestReporter = require('../reporter/ITestReporter');
-import TestResult = require('../test/TestResult');
-import Print = require('./Print');
+import {ITestReporter} from '../reporter/ITestReporter';
+import TestResult from '../test/TestResult';
+import Print from './Print';
 
 /////////////////////////////////
 // Default test reporter
 /////////////////////////////////
-class DefaultTestReporter implements ITestReporter {
+export default class DefaultTestReporter implements ITestReporter {
 
 	index = 0;
 
@@ -16,10 +16,10 @@ class DefaultTestReporter implements ITestReporter {
 
 	public printPositiveCharacter(testResult: TestResult) {
 		if (testResult.attempts > 1) {
-			this.print.out('\33[36m\33[1m' + testResult.attempts + '\33[0m');
+			this.print.out('\x1B[36m\x1B[1m' + testResult.attempts + '\x1B[0m');
 		}
 		else {
-			this.print.out('\33[36m\33[1m' + '.' + '\33[0m');
+			this.print.out('\x1B[36m\x1B[1m' + '.' + '\x1B[0m');
 		}
 		this.index++;
 		this.printBreakIfNeeded(this.index);
@@ -37,5 +37,3 @@ class DefaultTestReporter implements ITestReporter {
 		}
 	}
 }
-
-export = DefaultTestReporter;

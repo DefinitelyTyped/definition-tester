@@ -1,26 +1,24 @@
-/// <reference path='../_ref.d.ts' />
-
 'use strict';
 
-import Promise = require('bluebird');
+import * as Promise from 'bluebird';
 
-import Print = require('../reporter/Print');
-import File = require('../file/File');
-import util = require('../util/util');
+import Print from '../reporter/Print';
+import File from '../file/File';
+import * as util from '../util/util';
 
-import TestSuiteBase = require('../suite/TestSuiteBase');
+import TestSuiteBase from '../suite/TestSuiteBase';
 
-import TscTest = require('../tsc/TscTest');
-import TestResult = require('../test/TestResult');
-import ITestOptions = require('../test/ITestOptions');
+import TscTest from '../tsc/TscTest';
+import TestResult from '../test/TestResult';
+import {ITestOptions} from '../test/ITestOptions';
 
-import ITestReporter = require('../reporter/ITestReporter');
+import {ITestReporter} from '../reporter/ITestReporter';
 
 /////////////////////////////////
 // Try compile without .tscparams
 // It may indicate that it is compatible with --noImplicitAny maybe...
 /////////////////////////////////
-class TsdparamsSuite extends TestSuiteBase {
+export default class TsdparamsSuite extends TestSuiteBase {
 	testReporter: ITestReporter;
 	printErrorCount = false;
 	print: Print;
@@ -66,5 +64,3 @@ class TsdparamsSuite extends TestSuiteBase {
 		return [];
 	}
 }
-
-export = TsdparamsSuite;

@@ -1,4 +1,4 @@
-interface ITestOptions {
+export interface ITestOptions {
 	testerPath: string;
 	dtPath: string;
 	concurrent: number;
@@ -15,5 +15,3 @@ interface ITestOptions {
 	printFiles: boolean;
 	printRefMap: boolean;
 }
-
-export = ITestOptions;
