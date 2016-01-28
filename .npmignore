@@ -1,5 +1,4 @@
 /.idea
-/src
 /test
 /typings
 /repo
@@ -21,6 +20,9 @@
 /tscommand*
 ignoreBaseDirFile.*
 .tscache
+
+src/**/*.ts
+!src/**/*.d.ts
 
 /*.tgz
 /*.txt
