@@ -34,7 +34,7 @@ export default class Tsc {
 			}
 			return util.fileExists(tsfile + '.tscparams');
 		}).then(tsParamsExist => {
-			let command = 'node ' + tscPath + ' --module commonjs ';
+			let command = 'node ' + tscPath + ' --target es6 --module commonjs --experimentalDecorators ';
 			if (Tsc.useJsx.test(tsfile)) {
 				command += '--jsx react ';
 			}
