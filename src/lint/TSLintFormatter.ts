@@ -26,7 +26,7 @@ export default class Formatter {
 
 			output.push('');
 			output.push('');
-			output.push('> ' + file);
+			output.push(`> ${file}`);
 			output.push('');
 
 			for (let i = 0; i < failures.length; i++) {
@@ -38,7 +38,7 @@ export default class Formatter {
 				let line = lineAndCharacter.line + 1;
 				let character = lineAndCharacter.character + 1;
 
-				output.push('[' + ruleName + '] ' + failureString + ' at line ' + line + ', character ' + character + ':');
+				output.push(`[${ruleName}] ${failureString} at line ${line}, character ${character}:`);
 				output.push('');
 				output.push(lines[lineAndCharacter.line].replace(/\t/g, '    '));
 				output.push(point(character));

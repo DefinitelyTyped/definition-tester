@@ -53,7 +53,7 @@ export default class FileIndex {
 
 	public setFile(file: File): void {
 		if (file.fullPath in this.fileMap) {
-			throw new Error('cannot overwrite file: ' + file.fullPath);
+			throw new Error(`cannot overwrite file: ${file.fullPath}`);
 		}
 		this.fileMap[file.fullPath] = file;
 	}
@@ -173,7 +173,7 @@ export default class FileIndex {
 					memo.push(this.fileMap[ref]);
 				}
 				else {
-					console.log(' not mapped? -> ' + ref);
+					console.log(` not mapped? -> ${ref}`);
 					// console.log(Object.keys(this.fileMap).join('\n'));
 				}
 				return memo;

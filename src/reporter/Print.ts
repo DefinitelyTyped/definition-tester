@@ -54,14 +54,14 @@ export default class Print {
 		this.out('=============================================================================\n');
 		this.out('                    \x1B[36m\x1B[1mDefinitelyTyped Test Runner 0.5.0\x1B[0m\n');
 		this.out('=============================================================================\n');
-		this.out(' \x1B[36m\x1B[1mTypescript version:\x1B[0m ' + this.version + '\n');
-		this.out(' \x1B[36m\x1B[1mTypings           :\x1B[0m ' + this.typings + '\n');
-		this.out(' \x1B[36m\x1B[1mTests             :\x1B[0m ' + this.tests + '\n');
-		this.out(' \x1B[36m\x1B[1mTypeScript files  :\x1B[0m ' + this.tsFiles + '\n');
-		this.out(' \x1B[36m\x1B[1mTotal Memory      :\x1B[0m ' + totalMem + '\n');
-		this.out(' \x1B[36m\x1B[1mFree Memory       :\x1B[0m ' + freemem + '\n');
-		this.out(' \x1B[36m\x1B[1mCores             :\x1B[0m ' + os.cpus().length + '\n');
-		this.out(' \x1B[36m\x1B[1mConcurrent        :\x1B[0m ' + options.concurrent + '\n');
+		this.out(` \x1B[36m\x1B[1mTypescript version:\x1B[0m ${this.version}\n`);
+		this.out(` \x1B[36m\x1B[1mTypings           :\x1B[0m ${this.typings}\n`);
+		this.out(` \x1B[36m\x1B[1mTests             :\x1B[0m ${this.tests}\n`);
+		this.out(` \x1B[36m\x1B[1mTypeScript files  :\x1B[0m ${this.tsFiles}\n`);
+		this.out(` \x1B[36m\x1B[1mTotal Memory      :\x1B[0m ${totalMem}\n`);
+		this.out(` \x1B[36m\x1B[1mFree Memory       :\x1B[0m ${freemem}\n`);
+		this.out(` \x1B[36m\x1B[1mCores             :\x1B[0m ${os.cpus().length}\n`);
+		this.out(` \x1B[36m\x1B[1mConcurrent        :\x1B[0m ${options.concurrent}\n`);
 	}
 
 	public printSuiteHeader(title: string) {
@@ -91,7 +91,7 @@ export default class Print {
 	}
 
 	public printErrorsForFile(testResult: TestResult) {
-		this.out('----------------- For file:' + testResult.targetFile.filePathWithName);
+		this.out(`----------------- For file:${testResult.targetFile.filePathWithName}`);
 		if (testResult.stdout) {
 			// after 1.1.0-1
 			this.printBreak().out(this.trimTravis(testResult.stdout)).printBreak();
@@ -117,12 +117,12 @@ export default class Print {
 
 	public printSuccessCount(current: number, total: number) {
 		let arb = (total === 0) ? 0 : (current / total);
-		this.out(' \x1B[36m\x1B[1mSuccessful      :\x1B[0m \x1B[32m\x1B[1m' + (arb * 100).toFixed(2) + '% (' + current + '/' + total + ')\x1B[0m\n');
+		this.out(` \x1B[36m\x1B[1mSuccessful      :\x1B[0m \x1B[32m\x1B[1m${(arb * 100).toFixed(2)}% (${current}/${total})\x1B[0m\n`);
 	}
 
 	public printFailedCount(current: number, total: number) {
 		let arb = (total === 0) ? 0 : (current / total);
-		this.out(' \x1B[36m\x1B[1mFailure         :\x1B[0m \x1B[31m\x1B[1m' + (arb * 100).toFixed(2) + '% (' + current + '/' + total + ')\x1B[0m\n');
+		this.out(` \x1B[36m\x1B[1mFailure         :\x1B[0m \x1B[31m\x1B[1m${(arb * 100).toFixed(2)}% (${current}/${total})\x1B[0m\n`);
 	}
 
 	public printTypingsWithoutTestsMessage() {
@@ -134,42 +134,42 @@ export default class Print {
 	}
 
 	public printElapsedTime(time: string, s: number) {
-		this.out(' \x1B[36m\x1B[1mElapsed time    :\x1B[0m ~' + time + ' (' + s + 's)\n');
+		this.out(` \x1B[36m\x1B[1mElapsed time    :\x1B[0m ~${time} (${s}s)\n`);
 	}
 
 	public printSuiteErrorCount(errorHeadline: string, current: number, total: number, warn: boolean = false) {
 		let arb = (total === 0) ? 0 : (current / total);
 		this.out(' \x1B[36m\x1B[1m').out(errorHeadline).out(this.repeat(' ', 16 - errorHeadline.length));
 		if (warn) {
-			this.out(': \x1B[31m\x1B[1m' + (arb * 100).toFixed(2) + '% (' + current + '/' + total + ')\x1B[0m\n');
+			this.out(`: \x1B[31m\x1B[1m${(arb * 100).toFixed(2)}% (${current}/${total})\x1B[0m\n`);
 		}
 		else {
-			this.out(': \x1B[33m\x1B[1m' + (arb * 100).toFixed(2) + '% (' + current + '/' + total + ')\x1B[0m\n');
+			this.out(`: \x1B[33m\x1B[1m${(arb * 100).toFixed(2)}% (${current}/${total})\x1B[0m\n`);
 		}
 	}
 
 	public printSubHeader(file: string) {
-		this.out(' \x1B[36m\x1B[1m' + file + '\x1B[0m\n');
+		this.out(` \x1B[36m\x1B[1m${file}\x1B[0m\n`);
 	}
 
 	public printWarnCode(str: string) {
-		this.out(' \x1B[31m\x1B[1m<' + str.toLowerCase().replace(/ +/g, '-') + '>\x1B[0m\n');
+		this.out(` \x1B[31m\x1B[1m<${str.toLowerCase().replace(/ +/g, '-')}>\x1B[0m\n`);
 	}
 
 	public printLine(file: string) {
-		this.out(file + '\n');
+		this.out(`${file}\n`);
 	}
 
 	public printElement(file: string) {
-		this.out(' - ' + file + '\n');
+		this.out(` - ${file}\n`);
 	}
 
 	public printElement2(file: string) {
-		this.out('    - ' + file + '\n');
+		this.out(`    - ${file}\n`);
 	}
 
 	public printTypingsWithoutTestName(file: string) {
-		this.out(' - \x1B[33m\x1B[1m' + file + '\x1B[0m\n');
+		this.out(` - \x1B[33m\x1B[1m${file}\x1B[0m\n`);
 	}
 
 	public printTypingsWithoutTest(withoutTestTypings: string[]) {
@@ -271,7 +271,7 @@ export default class Print {
 		if (keys.length > 0) {
 			keys.sort().forEach((src) => {
 				let ref = index.getFile(src);
-				this.printLine('\x1B[31m\x1B[1m' + ref.filePathWithName + '\x1B[0m');
+				this.printLine(`\x1B[31m\x1B[1m${ref.filePathWithName}\x1B[0m`);
 				refMap[src].forEach((file) => {
 					this.printElement(file.filePathWithName);
 				});
@@ -339,7 +339,7 @@ export default class Print {
 				let ref = index.getFile(src);
 				this.printLine(ref.filePathWithName);
 				refMap[src].forEach((file) => {
-					this.printLine(' - ' + file.filePathWithName);
+					this.printLine(` - ${file.filePathWithName}`);
 				});
 			});
 		}

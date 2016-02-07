@@ -41,7 +41,7 @@ export default class TsdparamsSuite extends TestSuiteBase {
 
 	public filterTargetFiles(files: File[]): Promise<File[]> {
 		return Promise.filter(files, (file) => {
-			return util.fileExists(file.fullPath + '.tscparams');
+			return util.fileExists(`${file.fullPath}.tscparams`);
 		});
 	}
 

@@ -22,6 +22,6 @@ export default class File {
 	}
 
 	toString(): string {
-		return '[File ' + this.filePathWithName + ']';
+		return `[File ${this.filePathWithName}]`;
 	}
 }

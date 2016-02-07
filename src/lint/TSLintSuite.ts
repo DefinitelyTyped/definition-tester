@@ -58,7 +58,7 @@ export default class TSLintSuite extends TestSuiteBase {
 			testResult.targetFile = targetFile;
 
 			if (!res) {
-				testResult.stderr = 'bad result for ' + targetFile.filePathWithName;
+				testResult.stderr = `bad result for ${targetFile.filePathWithName}`;
 				testResult.exitCode = 1;
 			}
 			else if (res.failureCount > 0 && res.output) {
