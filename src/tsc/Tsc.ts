@@ -11,7 +11,6 @@ import {ITscExecOptions} from './ITscExecOptions';
 
 export default class Tsc {
 	static useJsx = /\.tsx$/i;
-	static useEs6 = /\.es6\.tsx?$/i;
 
 	public static run(tsfile: string, options: ITscExecOptions): Promise<exec.ExecResult> {
 		let tscPath = options.tscPath;
@@ -34,12 +33,9 @@ export default class Tsc {
 			}
 			return util.fileExists(tsfile + '.tscparams');
 		}).then(tsParamsExist => {
-			let command = 'node ' + tscPath + ' --module commonjs ';
+			let command = 'node ' + tscPath + ' --target es6 --module commonjs --experimentalDecorators ';
 			if (Tsc.useJsx.test(tsfile)) {
 				command += '--jsx react ';
-			}
-			if (Tsc.useEs6.test(tsfile)) {
-				command += '--target es6 ';
 			}
 			if (options.useTscParams && tsParamsExist) {
 				command += '@' + tsfile + '.tscparams';
