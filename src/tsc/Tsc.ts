@@ -33,14 +33,13 @@ export default class Tsc {
 			}
 			return util.fileExists(tsfile + '.tscparams');
 		}).then(tsParamsExist => {
-			let command = 'node ' + tscPath + ' --target es6 --module commonjs --experimentalDecorators ';
+			let command = `node ${tscPath} --target es6 --module commonjs --experimentalDecorators `;
 			if (Tsc.useJsx.test(tsfile)) {
 				command += '--jsx react ';
 			}
 			if (options.useTscParams && tsParamsExist) {
-				command += '@' + tsfile + '.tscparams';
-			}
-			else if (options.checkNoImplicitAny) {
+				command += `@${tsfile}.tscparams`;
+			} else if (options.checkNoImplicitAny) {
 				command += '--noImplicitAny';
 			}
 			return exec.exec(command, [tsfile]);

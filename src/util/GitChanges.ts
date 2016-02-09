@@ -29,8 +29,7 @@ export default class GitChanges {
 				git.exec('diff', opts, args, (err: Error, msg: string) => {
 					if (err) {
 						reject(err);
-					}
-					else {
+					} else {
 						resolve(msg.replace(/^\s+/, '').replace(/\s+$/, '').split(/\r?\n/g));
 					}
 				});

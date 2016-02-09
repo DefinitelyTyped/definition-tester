@@ -17,7 +17,7 @@ export function exec(filename: string, cmdLineArgs: string[]): Promise<ExecResul
 
 		let cmdLine = filename + ' ' + cmdLineArgs.join(' ');
 
-		let cp = child_process.exec(cmdLine, {maxBuffer: 1 * 1024 * 1024}, (error: ErrorCode, stdout: Buffer, stderr: Buffer) => {
+		let cp = child_process.exec(cmdLine, { maxBuffer: 1 * 1024 * 1024 }, (error: ErrorCode, stdout: Buffer, stderr: Buffer) => {
 			result.error = error;
 			result.stdout = String(stdout);
 			result.stderr = String(stderr);

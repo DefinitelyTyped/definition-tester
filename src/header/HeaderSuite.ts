@@ -36,13 +36,11 @@ export default class HeaderSuite extends TestSuiteBase {
 
 			if (DH.isPartial(content)) {
 				testResult.exitCode = 0;
-			}
-			else {
+			} else {
 				let result = DH.parse(content);
 				if (result.success) {
 					testResult.exitCode = 0;
-				}
-				else {
+				} else {
 					testResult.exitCode = 1;
 					testResult.stderr = '\n' + result.details;
 				}

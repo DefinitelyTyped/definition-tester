@@ -14,7 +14,7 @@ declare module 'findup-sync' {
 
 	function mod(pattern: string[] | string, opts?: IOptions): string;
 
-    namespace mod {}
+    namespace mod { }
 
 	export = mod;
 }

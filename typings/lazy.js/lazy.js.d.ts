@@ -86,7 +86,7 @@ declare module LazyJS {
     }
 
     interface GeneratedSequence<T> extends Sequence<T> {
-        new(generatorFn: GeneratorCallback<T>, length: number): GeneratedSequence<T>;
+        new (generatorFn: GeneratorCallback<T>, length: number): GeneratedSequence<T>;
         length(): number;
     }
 
@@ -256,6 +256,5 @@ declare module LazyJS {
 declare var Lazy: LazyJS.LazyStatic;
 
 declare module 'lazy.js' {
-export = Lazy;
+	export = Lazy;
 }
-
