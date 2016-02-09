@@ -90,8 +90,7 @@ export default class FileIndex {
 					file = new File(this.options.dtPath, local);
 					this.setFile(file);
 					this.removed[full] = file;
-				}
-				else {
+				} else {
 					this.changed[full] = file;
 				}
 			});
@@ -157,8 +156,7 @@ export default class FileIndex {
 	private addToRefMap(fullPath: string, file: File): void {
 		if (fullPath in this.refMap) {
 			this.refMap[fullPath].push(file);
-		}
-		else {
+		} else {
 			this.refMap[fullPath] = [file];
 		}
 	}
@@ -171,8 +169,7 @@ export default class FileIndex {
 			}).reduce((memo: File[], ref: string) => {
 				if (ref in this.fileMap) {
 					memo.push(this.fileMap[ref]);
-				}
-				else {
+				} else {
 					console.log(` not mapped? -> ${ref}`);
 					// console.log(Object.keys(this.fileMap).join('\n'));
 				}

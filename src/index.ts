@@ -10,7 +10,7 @@ import * as findup from 'findup-sync';
 import * as util from './util/util';
 import TestRunner from './test/TestRunner';
 
-let testerPkgPath = path.resolve(findup('package.json', {cwd: process.cwd()}));
+let testerPkgPath = path.resolve(findup('package.json', { cwd: process.cwd() }));
 
 let optimist = opt(process.argv);
 optimist.boolean('single-thread');

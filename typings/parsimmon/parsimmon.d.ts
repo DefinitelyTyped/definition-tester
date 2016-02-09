@@ -7,7 +7,7 @@
 
 declare module 'parsimmon' {
 	module Parsimmon {
-		
+
 		export type StreamType = string;
 
 		export interface Mark<T> {

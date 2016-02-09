@@ -48,11 +48,11 @@ export default class TestRunner {
 		this.index = new FileIndex(this.options);
 		this.changes = new GitChanges(this.options.dtPath);
 
-		var tscVersion = 'unknown';
+		let tscVersion = 'unknown';
 		try {
-			var tscPackagePath = path.resolve(this.options.tscPath, '../../package.json');
-			var json = fs.readFileSync(tscPackagePath, {encoding: 'utf8'});
-			var data = JSON.parse(json);
+			let tscPackagePath = path.resolve(this.options.tscPath, '../../package.json');
+			let json = fs.readFileSync(tscPackagePath, { encoding: 'utf8' });
+			let data = JSON.parse(json);
 			tscVersion = data.version;
 		} catch (e) {
 		}
@@ -68,7 +68,7 @@ export default class TestRunner {
 	}
 
 	private changedInternals(changes: string[]): boolean {
-		var keysWords = [
+		let keysWords = [
 			'_infrastructure',
 			'package.json',
 			'tslint.json',
@@ -120,12 +120,10 @@ export default class TestRunner {
 					if (this.changedInternals(changes)) {
 						this.print.printTestInternal();
 						return this.runTests(this.index.files);
-					}
-					else if (this.options.changes) {
+					} else if (this.options.changes) {
 						this.print.printQueue(targets);
 						return this.runTests(targets);
-					}
-					else {
+					} else {
 						this.print.printTestAll();
 						return this.runTests(this.index.files);
 					}
@@ -140,16 +138,16 @@ export default class TestRunner {
 	}
 
 	private runTests(files: File[]): Promise<void> {
-		var syntaxChecking = new SyntaxSuite(this.options);
-		var testEval = new EvalSuite(this.options);
-		var headers = new HeaderSuite(this.options);
-		var linter = new TSLintSuite(this.options);
-		var tscparams = new TscparamsSuite(this.options, this.print);
+		let syntaxChecking = new SyntaxSuite(this.options);
+		let testEval = new EvalSuite(this.options);
+		let headers = new HeaderSuite(this.options);
+		let linter = new TSLintSuite(this.options);
+		let tscparams = new TscparamsSuite(this.options, this.print);
 
 		return Promise.attempt(() => {
 			assert(Array.isArray(files), 'files must be array');
 
-			var filters: Promise<File[]>[] = [];
+			let filters: Promise<File[]>[] = [];
 			// don't mess with this ordering
 			filters.push(syntaxChecking.filterTargetFiles(files));
 			filters.push(testEval.filterTargetFiles(files));
@@ -203,19 +201,19 @@ export default class TestRunner {
 
 		// TODO clean this up
 		if (testEval) {
-			var existsTestTypings: string[] = Lazy(testEval.testResults).map((testResult) => {
+			let existsTestTypings: string[] = Lazy(testEval.testResults).map((testResult) => {
 				return testResult.targetFile.dir;
 			}).reduce((a: string[], b: string) => {
 				return a.indexOf(b) < 0 ? a.concat([b]) : a;
 			}, []);
 
-			var typings: string[] = Lazy(files).map((file) => {
+			let typings: string[] = Lazy(files).map((file) => {
 				return file.dir;
 			}).reduce((a: string[], b: string) => {
 				return a.indexOf(b) < 0 ? a.concat([b]) : a;
 			}, []);
 
-			var withoutTestTypings: string[] = typings.filter((typing) => {
+			let withoutTestTypings: string[] = typings.filter((typing) => {
 				return existsTestTypings.indexOf(typing) < 0;
 			});
 

@@ -39,8 +39,7 @@ export default class Tsc {
 			}
 			if (options.useTscParams && tsParamsExist) {
 				command += `@${tsfile}.tscparams`;
-			}
-			else if (options.checkNoImplicitAny) {
+			} else if (options.checkNoImplicitAny) {
 				command += '--noImplicitAny';
 			}
 			return exec.exec(command, [tsfile]);

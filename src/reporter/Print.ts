@@ -65,8 +65,8 @@ export default class Print {
 	}
 
 	public printSuiteHeader(title: string) {
-		let left = Math.floor((this.WIDTH - title.length ) / 2) - 1;
-		let right = Math.ceil((this.WIDTH - title.length ) / 2) - 1;
+		let left = Math.floor((this.WIDTH - title.length) / 2) - 1;
+		let right = Math.ceil((this.WIDTH - title.length) / 2) - 1;
 		this.out(this.repeat('=', left)).out(' \x1B[34m\x1B[1m');
 		this.out(title);
 		this.out('\x1B[0m ').out(this.repeat('=', right)).printBreak();
@@ -95,12 +95,10 @@ export default class Print {
 		if (testResult.stdout) {
 			// after 1.1.0-1
 			this.printBreak().out(this.trimTravis(testResult.stdout)).printBreak();
-		}
-		else if (testResult.stderr) {
+		} else if (testResult.stderr) {
 			// before 1.1.0-1
 			this.printBreak().out(this.trimTravis(testResult.stderr)).printBreak();
-		}
-		else {
+		} else {
 			this.printBreak().out('no stderr content').printBreak();
 		}
 	}
@@ -142,8 +140,7 @@ export default class Print {
 		this.out(' \x1B[36m\x1B[1m').out(errorHeadline).out(this.repeat(' ', 16 - errorHeadline.length));
 		if (warn) {
 			this.out(`: \x1B[31m\x1B[1m${(arb * 100).toFixed(2)}% (${current}/${total})\x1B[0m\n`);
-		}
-		else {
+		} else {
 			this.out(`: \x1B[33m\x1B[1m${(arb * 100).toFixed(2)}% (${current}/${total})\x1B[0m\n`);
 		}
 	}
@@ -187,8 +184,7 @@ export default class Print {
 		let reporter = testResult.hostedBy.testReporter;
 		if (testResult.success) {
 			reporter.printPositiveCharacter(testResult);
-		}
-		else {
+		} else {
 			reporter.printNegativeCharacter(testResult);
 		}
 	}
@@ -213,8 +209,7 @@ export default class Print {
 				this.printLine(adding[src].filePathWithName);
 				return adding[src];
 			});
-		}
-		else {
+		} else {
 			this.printLine(' no files listed here');
 		}
 	}
@@ -228,8 +223,7 @@ export default class Print {
 			files.forEach((file) => {
 				this.printLine(file.filePathWithName);
 			});
-		}
-		else {
+		} else {
 			this.printLine(' no files listed here');
 		}
 	}
@@ -256,8 +250,7 @@ export default class Print {
 					this.printElement(file.filePathWithName);
 				});
 			});
-		}
-		else {
+		} else {
 			this.printLine(' no files listed here');
 		}
 	}
@@ -276,8 +269,7 @@ export default class Print {
 					this.printElement(file.filePathWithName);
 				});
 			});
-		}
-		else {
+		} else {
 			this.printLine(' no files listed here');
 		}
 	}
@@ -290,8 +282,7 @@ export default class Print {
 			paths.sort().forEach((line) => {
 				this.printLine(line);
 			});
-		}
-		else {
+		} else {
 			this.printLine(' no files listed here');
 		}
 	}
@@ -306,8 +297,7 @@ export default class Print {
 			keys.sort().forEach((src) => {
 				this.printLine(changeMap[src].filePathWithName);
 			});
-		}
-		else {
+		} else {
 			this.printLine(' no files listed here');
 		}
 	}
@@ -322,8 +312,7 @@ export default class Print {
 			keys.sort().forEach((src) => {
 				this.printLine(changeMap[src].filePathWithName);
 			});
-		}
-		else {
+		} else {
 			this.printLine(' no files listed here');
 		}
 	}
@@ -342,8 +331,7 @@ export default class Print {
 					this.printLine(` - ${file.filePathWithName}`);
 				});
 			});
-		}
-		else {
+		} else {
 			this.printLine(' no files listed here');
 		}
 	}

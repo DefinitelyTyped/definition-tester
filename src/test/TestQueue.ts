@@ -11,7 +11,7 @@ class TestRunItem {
 	attempts: number = 0;
 	defer: Promise.Resolver<TestResult>;
 
-	constructor (test: ITest) {
+	constructor(test: ITest) {
 		this.test = test;
 		this.defer = Promise.defer<TestResult>();
 	}
