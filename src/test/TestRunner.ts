@@ -200,6 +200,8 @@ export default class TestRunner {
 		}).first();
 
 		// TODO clean this up
+        let typings: string[];
+        let withoutTestTypings: string[];
 		if (testEval) {
 			let existsTestTypings: string[] = Lazy(testEval.testResults).map((testResult) => {
 				return testResult.targetFile.dir;
@@ -207,13 +209,13 @@ export default class TestRunner {
 				return a.indexOf(b) < 0 ? a.concat([b]) : a;
 			}, []);
 
-			let typings: string[] = Lazy(files).map((file) => {
+			typings = Lazy(files).map((file) => {
 				return file.dir;
 			}).reduce((a: string[], b: string) => {
 				return a.indexOf(b) < 0 ? a.concat([b]) : a;
 			}, []);
 
-			let withoutTestTypings: string[] = typings.filter((typing) => {
+			withoutTestTypings = typings.filter((typing) => {
 				return existsTestTypings.indexOf(typing) < 0;
 			});
 
