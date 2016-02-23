@@ -17,12 +17,7 @@
     "name": "Bart van der Schoor",
     "url": "https://github.com/Bartvds"
   },
-  "licenses": [
-    {
-      "type": "MIT",
-      "url": "https://raw.github.com/DefinitelyTyped/definition-tester/master/LICENSE-MIT"
-    }
-  ],
+  "license": "MIT",
   "bugs": {
     "url": "https://github.com/DefinitelyTyped/definition-tester/issues"
   },
@@ -39,24 +34,24 @@
     "dt": "./bin/cli.js"
   },
   "dependencies": {
-    "bluebird": "^3.1.2",
+    "bluebird": "^3.3.1",
     "definition-header": "^0.3.0",
     "findup-sync": "^0.3.0",
     "git-wrapper": "^0.1.1",
-    "glob": "^6.0.4",
+    "glob": "^7.0.0",
     "lazy.js": "^0.4.2",
     "manticore": "^0.2.4",
     "optimist": "^0.6.1"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
-    "grunt-contrib-clean": "^0.7.0",
+    "grunt-contrib-clean": "^1.0.0",
     "grunt-ts": "^5.3.2",
-    "grunt-tslint": "^3.0.1",
+    "grunt-tslint": "^3.0.3",
     "mocha-unfunk-reporter": "^0.4.0",
     "source-map-support": "^0.4.0",
-    "tslint": "^3.3.0",
+    "tslint": "^3.4.0",
     "tslint-path-formatter": "^0.1.1",
-    "typescript": "^1.7.5"
+    "typescript": "^1.8.2"
   }
 }

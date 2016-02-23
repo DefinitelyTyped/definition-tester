@@ -2,9 +2,6 @@
 	"rules": {
 		"ban": [],
 		"class-name": true,
-		"x_comment-format": [true,
-			"check-lowercase"
-		],
 		"comment-format": [true,
 			"check-space"
 		],
@@ -37,10 +34,6 @@
 		"no-unreachable": true,
 		"no-unused-variable": false,
 		"no-use-before-declare": true,
-		"x_one-line": [true,
-			"check-catch",
-			"check-else"
-		],
 		"one-line": [
 			"check-open-brace",
 			"check-whitespace"
@@ -52,12 +45,6 @@
 		"semicolon": true,
 		"triple-equals": [true,
 			"allow-null-check"
-		],
-		"x_typedef": [
-			"callSignature",
-			"catchClause",
-			"parameter",
-			"variableDeclarator"
 		],
 		"typedef": [true,
 			"indexSignature",
@@ -77,8 +64,6 @@
 			"check-module",
 			"check-function"
 		],
-		"x_variable-name": [true,
-			"allow-leading-underscore"],
 		"whitespace": [true,
 			"check-type",
 			"check-branch",

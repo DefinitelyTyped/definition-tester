@@ -14,31 +14,31 @@
   },
   "dependencies": {
     "node/node.d.ts": {
-      "ref": "5e269cec94f666c298625948c5c5ff8224846e33"
+      "ref": "bd269cad4cb2b495f940c7b6afc5825d568029be"
     },
     "bluebird/bluebird.d.ts": {
-      "ref": "5e269cec94f666c298625948c5c5ff8224846e33"
+      "ref": "bd269cad4cb2b495f940c7b6afc5825d568029be"
     },
     "glob/glob.d.ts": {
-      "ref": "5e269cec94f666c298625948c5c5ff8224846e33"
+      "ref": "bd269cad4cb2b495f940c7b6afc5825d568029be"
     },
     "lazy.js/lazy.js.d.ts": {
-      "ref": "5e269cec94f666c298625948c5c5ff8224846e33"
+      "ref": "bd269cad4cb2b495f940c7b6afc5825d568029be"
     },
     "optimist/optimist.d.ts": {
-      "ref": "5e269cec94f666c298625948c5c5ff8224846e33"
+      "ref": "bd269cad4cb2b495f940c7b6afc5825d568029be"
     },
     "parsimmon/parsimmon.d.ts": {
-      "ref": "5e269cec94f666c298625948c5c5ff8224846e33"
+      "ref": "bd269cad4cb2b495f940c7b6afc5825d568029be"
     },
     "minimatch/minimatch.d.ts": {
-      "ref": "5e269cec94f666c298625948c5c5ff8224846e33"
+      "ref": "bd269cad4cb2b495f940c7b6afc5825d568029be"
     },
     "chalk/chalk.d.ts": {
-      "ref": "5e269cec94f666c298625948c5c5ff8224846e33"
+      "ref": "bd269cad4cb2b495f940c7b6afc5825d568029be"
     },
     "findup-sync/findup-sync.d.ts": {
-      "ref": "5e269cec94f666c298625948c5c5ff8224846e33"
+      "ref": "bd269cad4cb2b495f940c7b6afc5825d568029be"
     }
   }
 }
