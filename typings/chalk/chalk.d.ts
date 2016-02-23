@@ -10,7 +10,7 @@ declare module Chalk {
 		styles: ChalkStyleMap;
 
 		stripColor(value: string): any;
-		hasColor(str: string): boolean;
+		hasColor(str:  string): boolean;
 	}
 
 	export interface ChalkChain extends ChalkStyle {
@@ -90,3 +90,4 @@ declare module "chalk" {
 	var ch: Chalk.ChalkModule;
 	export = ch;
 }
+

@@ -13,7 +13,7 @@ declare module "minimatch" {
 		function makeRe(pattern: string, options?: IOptions): RegExp;
 
 		var Minimatch: IMinimatchStatic;
-
+		
 		interface IOptions {
 			debug?: boolean;
 			nobrace?: boolean;
