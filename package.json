@@ -51,7 +51,7 @@
     "grunt-tslint": "^3.0.3",
     "mocha-unfunk-reporter": "^0.4.0",
     "source-map-support": "^0.4.0",
-    "tslint": "^3.5.0",
+    "tslint": "next",
     "tslint-path-formatter": "^0.1.1",
     "typescript": "next"
   }
