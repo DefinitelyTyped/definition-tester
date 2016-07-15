@@ -14,7 +14,6 @@ import {ITestReporter} from '../reporter/ITestReporter';
 export interface ITestSuite {
 	testSuiteName: string;
 	errorHeadline: string;
-	filterTargetFiles(files: File[]): Promise<File[]>;
 
 	start(targetFiles: File[], testCallback: (result: TestResult, index: number) => void): Promise<ITestSuite>;
 

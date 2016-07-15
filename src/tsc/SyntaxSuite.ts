@@ -6,8 +6,6 @@ import File from '../file/File';
 import TestSuiteBase from '../suite/TestSuiteBase';
 import {ITestOptions} from '../test/ITestOptions';
 
-let endDts = /\w\.d\.ts$/;
-
 /////////////////////////////////
 // .d.ts syntax inspection
 /////////////////////////////////
@@ -17,9 +15,4 @@ export default class SyntaxChecking extends TestSuiteBase {
 		super(options, 'Syntax checking', 'Syntax error');
 	}
 
-	public filterTargetFiles(files: File[]): Promise<File[]> {
-		return Promise.resolve(files.filter((file) => {
-			return endDts.test(file.filePathWithName);
-		}));
-	}
 }

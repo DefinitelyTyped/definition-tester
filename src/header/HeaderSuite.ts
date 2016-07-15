@@ -22,12 +22,6 @@ export default class HeaderSuite extends TestSuiteBase {
 		super(options, 'Header format', 'Invalid header');
 	}
 
-	public filterTargetFiles(files: File[]): Promise<File[]> {
-		return Promise.resolve(files.filter((file) => {
-			return isDef.test(file.filePathWithName);
-		}));
-	}
-
 	public runTest(targetFile: File): Promise<TestResult> {
 		return util.readFile(targetFile.fullPath).then((content) => {
 			let testResult = new TestResult();
@@ -35,14 +29,15 @@ export default class HeaderSuite extends TestSuiteBase {
 			testResult.targetFile = targetFile;
 
 			if (DH.isPartial(content)) {
-				testResult.exitCode = 0;
+				testResult.diagnostics = [];
 			} else {
 				let result = DH.parse(content);
 				if (result.success) {
-					testResult.exitCode = 0;
+					testResult.diagnostics = [];
 				} else {
-					testResult.exitCode = 1;
-					testResult.stderr = '\n' + result.details;
+					testResult.diagnostics = ['\n', result.details];
+					console.log(`== Header error in ${targetFile.fullPath} ==`);
+					console.log(result.details);
 				}
 			}
 

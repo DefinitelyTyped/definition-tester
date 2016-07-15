@@ -63,7 +63,7 @@ export default class TestQueue {
 		item.test.run().then((res) => {
 			// see if we can retry
 			if (!res.success && item.attempts < this.maxRetry) {
-				if (res.stderr && /^Killed/.test(res.stderr)) {
+				if (res.diagnostics.length && res.diagnostics.some(d => /^Killed/.test(d))) {
 					this.retries.push(item);
 					return;
 				}

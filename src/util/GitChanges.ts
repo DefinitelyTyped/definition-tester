@@ -13,14 +13,14 @@ export default class GitChanges {
 		this.dtPath = dtPath;
 	}
 
-	public readChanges(): Promise<string[]> {
+	public readChanges(): Promise<util.FullPath[]> {
 		let dir = path.join(this.dtPath, '.git');
 
 		return util.fileExists(dir).then((exists) => {
 			if (!exists) {
 				throw new Error('cannot locate git-dir: ' + dir);
 			}
-			return new Promise<string[]>((resolve: (result: string[]) => void, reject: (error: any) => void) => {
+			return new Promise<util.FullPath[]>((resolve: (result: util.FullPath[]) => void, reject: (error: any) => void) => {
 				let args = ['--name-only HEAD~1'];
 				let opts = {};
 				let git = new Git({
@@ -30,7 +30,7 @@ export default class GitChanges {
 					if (err) {
 						reject(err);
 					} else {
-						resolve(msg.replace(/^\s+/, '').replace(/\s+$/, '').split(/\r?\n/g));
+						resolve(msg.replace(/^\s+/, '').replace(/\s+$/, '').split(/\r?\n/g) as util.FullPath[]);
 					}
 				});
 			});

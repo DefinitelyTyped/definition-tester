@@ -10,6 +10,8 @@ import * as findup from 'findup-sync';
 import * as util from './util/util';
 import TestRunner from './test/TestRunner';
 
+Promise.longStackTraces();
+
 let testerPkgPath = path.resolve(findup('package.json', { cwd: process.cwd() }));
 
 let optimist = opt(process.argv);

@@ -5,8 +5,10 @@ export interface ITestOptions {
 	tscPath?: string;
 	tslintConfig: string;
 
+	/** Set to true to run only changed files */
 	changes: boolean;
 	tests: boolean;
+	/** Set to true to run the linting suite */
 	lint: boolean;
 	headers: boolean;
 	tscparams: boolean;

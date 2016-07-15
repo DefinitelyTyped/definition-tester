@@ -3,6 +3,7 @@
 import File from '../file/File';
 import {ITestSuite} from '../suite/ITestSuite';
 import {ITscExecOptions} from '../tsc/ITscExecOptions';
+import * as ts from 'typescript';
 
 /////////////////////////////////
 // Test results
@@ -10,13 +11,10 @@ import {ITscExecOptions} from '../tsc/ITscExecOptions';
 export default class TestResult {
 	hostedBy: ITestSuite;
 	targetFile: File;
-
-	stdout: string = '';
-	stderr: string = '';
-	exitCode: number = 0;
+	diagnostics: string[];
 	attempts: number = 1;
 
 	public get success(): boolean {
-		return this.exitCode === 0;
+		return this.diagnostics.length === 0;
 	}
 }
