@@ -20,7 +20,8 @@
         "!./repo/**/*.ts",
         "!./node_modules/**/*",
         "!./tmp/**/*.ts",
-        "./node_modules/typescript/lib/lib.es6.d.ts"
+        "./node_modules/typescript/lib/lib.es6.d.ts",
+        "./node_modules/typescript/lib/typescript.d.ts"
     ],
     "exclude": [],
     "files": [

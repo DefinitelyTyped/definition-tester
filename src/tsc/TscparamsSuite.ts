@@ -25,29 +25,9 @@ export default class TsdparamsSuite extends TestSuiteBase {
 
 	constructor(options: ITestOptions, print: Print) {
 		super(options, 'Find not required .tscparams files', 'New arrival!');
-
-		this.print = print;
-
-		this.testReporter = {
-			printPositiveCharacter: (testResult: TestResult) => {
-				this.print
-					.clearCurrentLine()
-					.printTypingsWithoutTestName(testResult.targetFile.filePathWithName);
-			},
-			printNegativeCharacter: (testResult: TestResult) => {
-			}
-		};
-	}
-
-	public filterTargetFiles(files: File[]): Promise<File[]> {
-		return Promise.filter(files, (file) => {
-			return util.fileExists(`${file.fullPath}.tscparams`);
-		});
 	}
 
 	public runTest(targetFile: File): Promise<TestResult> {
-		this.print.clearCurrentLine().out(targetFile.filePathWithName);
-
 		return this.queue.run(new TscTest(this, targetFile, {
 			tscPath: this.options.tscPath,
 			useTscParams: false,

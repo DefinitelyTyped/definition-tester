@@ -1,4 +1,4 @@
-'use strict';
+ 'use strict';
 
 import * as path from 'path';
 import * as fs from 'fs';
@@ -16,6 +16,7 @@ import FileIndex from '../file/FileIndex';
 import {ITestOptions} from './ITestOptions';
 import TestResult from './TestResult';
 
+import * as util from '../util/util';
 import Timer from '../util/Timer';
 import GitChanges from '../util/GitChanges';
 
@@ -29,12 +30,15 @@ import TSLintSuite from '../lint/TSLintSuite';
 
 import HeaderSuite from '../header/HeaderSuite';
 
+function isEntryPointFile(file: util.FullPath) : boolean {
+	const name = path.basename(file);
+	return name === 'index.d.ts' || name === `${path.basename(path.dirname(file))}.d.ts`;
+}
+
 /////////////////////////////////
 // The main class to kick things off
 /////////////////////////////////
 export default class TestRunner {
-	public options: ITestOptions;
-
 	private timer: Timer;
 	private suites: ITestSuite[] = [];
 
@@ -42,15 +46,13 @@ export default class TestRunner {
 	public index: FileIndex;
 	public print: Print;
 
-	constructor(options?: ITestOptions) {
-		this.options = options;
-
-		this.index = new FileIndex(this.options);
-		this.changes = new GitChanges(this.options.dtPath);
+	constructor(private options: ITestOptions) {
+		this.index = new FileIndex(options);
+		this.changes = new GitChanges(options.dtPath);
 
 		let tscVersion = 'unknown';
 		try {
-			let tscPackagePath = path.resolve(this.options.tscPath, '../../package.json');
+			let tscPackagePath = path.resolve(options.tscPath, '../../package.json');
 			let json = fs.readFileSync(tscPackagePath, { encoding: 'utf8' });
 			let data = JSON.parse(json);
 			tscVersion = data.version;
@@ -58,8 +60,8 @@ export default class TestRunner {
 		}
 		this.print = new Print(tscVersion);
 
-		if (this.options.debug) {
-			console.dir(this.options);
+		if (options.debug) {
+			console.dir(options);
 		}
 	}
 
@@ -67,16 +69,42 @@ export default class TestRunner {
 		this.suites.push(suite);
 	}
 
-	private changedInternals(changes: string[]): boolean {
-		let keysWords = [
-			'_infrastructure',
-			'package.json',
-			'tslint.json',
-		];
-		return changes.some((fileName) => {
-			return keysWords.some((keyWord) => {
-				return fileName.indexOf(keyWord) > -1;
-			});
+	private getTestsToRun(): Promise<util.TsConfigFullPath[]> {
+		return new Promise<util.TsConfigFullPath[]>(resolve => {
+			if (this.options.changes) {
+				this.changes.readChanges().done((changes => {
+					// Every changed file adds its parent folder to the
+					// list of things to run
+					const changedFolders: {[name: string]: boolean } = {};
+					changes.forEach(ch => {
+						changedFolders[path.dirname(ch)] = true;
+					});
+					resolve(Object.keys(changedFolders).map(s => path.join(s, 'tsconfig.json') as util.TsConfigFullPath));
+				}));
+			} else {
+				// Just go with all config files
+				resolve(this.index.findFilesByName(/^tsconfig\.json$/i) as Promise<util.TsConfigFullPath[]>);
+			}
+		});
+	}
+	private getTsFiles(): Promise<util.FullPath[]> {
+		return new Promise<util.FullPath[]>(resolve => {
+			if (this.options.changes) {
+				this.changes.readChanges().done((changes => {
+					// Every changed file adds its parent folder to the
+					// list of things to run
+					const changedFolders: {[name: string]: boolean } = {};
+					changes.forEach(ch => {
+						changedFolders[path.dirname(ch)] = true;
+					});
+					const a: Promise<util.FullPath[]>[] = Object.keys(changedFolders).map(s => this.index.findFilesByName(/\w\.d\.ts$/));
+					const b: Promise<util.FullPath[][]> = Promise.all(a);
+					resolve(b.then(results => results.reduce((memo, results) => memo.concat(results), [])));
+				}));
+			} else {
+				// Just go with all config files
+				resolve(this.index.findFilesByName(/\w\.d\.ts$/) as Promise<util.FullPath[]>);
+			}
 		});
 	}
 
@@ -84,23 +112,8 @@ export default class TestRunner {
 		this.timer = new Timer();
 		this.timer.start();
 
-		this.print.printChangeHeader();
-
-		// only includes .d.ts or -tests.ts or -test.ts or .ts
-		return this.index.readIndex().then(() => {
-			return this.changes.readChanges().catch((err): string[] => {
-				console.dir(err.message);
-				return [];
-			});
-		}).then((changes: string[]) => {
-			this.print.printAllChanges(changes);
-
-			return this.index.collectDiff(changes).then(() => {
-				this.print.printRemovals(this.index.removed);
-				this.print.printRelChanges(this.index.changed);
-
-				return this.index.parseFiles();
-			}).then(() => {
+		return new Promise<boolean>(resolve => {
+			this.getTestsToRun().done(testsToRun => {
 				if (this.options.printRefMap) {
 					this.print.printRefMap(this.index, this.index.refMap);
 				}
@@ -111,23 +124,11 @@ export default class TestRunner {
 					// bail
 					return Promise.resolve(false);
 				}
+
 				if (this.options.printFiles) {
 					this.print.printFiles(this.index.files);
 				}
-
-				return this.index.collectTargets().then((targets: File[]) => {
-					// check overrides
-					if (this.changedInternals(changes)) {
-						this.print.printTestInternal();
-						return this.runTests(this.index.files);
-					} else if (this.options.changes) {
-						this.print.printQueue(targets);
-						return this.runTests(targets);
-					} else {
-						this.print.printTestAll();
-						return this.runTests(this.index.files);
-					}
-				}).then(() => {
+				this.runTests(testsToRun.map(test => File.fromFullPath(test))).then(() => {
 					// success yes/no?
 					return !this.suites.some((suite) => {
 						return suite.ngTests.length !== 0;
@@ -139,32 +140,15 @@ export default class TestRunner {
 
 	private runTests(files: File[]): Promise<void> {
 		let syntaxChecking = new SyntaxSuite(this.options);
-		let testEval = new EvalSuite(this.options);
 		let headers = new HeaderSuite(this.options);
 		let linter = new TSLintSuite(this.options);
-		let tscparams = new TscparamsSuite(this.options, this.print);
 
-		return Promise.attempt(() => {
-			assert(Array.isArray(files), 'files must be array');
-
-			let filters: Promise<File[]>[] = [];
-			// don't mess with this ordering
-			filters.push(syntaxChecking.filterTargetFiles(files));
-			filters.push(testEval.filterTargetFiles(files));
-			filters.push(headers.filterTargetFiles(files));
-			filters.push(linter.filterTargetFiles(files));
-			filters.push(tscparams.filterTargetFiles(files));
-
-			return Promise.all(filters);
-
-		}).spread((syntaxFiles: File[], testFiles: File[], headerFiles: File[]) => {
-
-			this.print.init(files.length, syntaxFiles.length, testFiles.length);
+		return new Promise<void>(resolve => {
+			this.print.init(files.length, files.length);
 			this.print.printHeader(this.options);
 
 			if (this.options.tests) {
 				this.addSuite(syntaxChecking);
-				this.addSuite(testEval);
 			}
 			if (this.options.lint) {
 				this.addSuite(linter);
@@ -172,21 +156,30 @@ export default class TestRunner {
 			if (this.options.headers) {
 				this.addSuite(headers);
 			}
-			if (this.options.tscparams) {
-				this.addSuite(tscparams);
-			}
 
 			return Promise.reduce(this.suites, (count: number, suite: ITestSuite) => {
 				suite.testReporter = suite.testReporter || new DefaultReporter(this.print);
 
 				this.print.printSuiteHeader(suite.testSuiteName);
+				if (suite.testSuiteName === 'Header format') {
+					this.getTsFiles().done(tsFiles => {
+						return suite.start((tsFiles.filter(isEntryPointFile)).map(test => File.fromFullPath(test)), (testResult) => {
+							this.print.printTestComplete(testResult);
+						}).then((suite) => {
+							this.print.printSuiteComplete(suite);
+							return count++;
+						});
+					});
+				}
+				else {
+					return suite.start(files, (testResult) => {
+						this.print.printTestComplete(testResult);
+					}).then((suite) => {
+						this.print.printSuiteComplete(suite);
+						return count++;
+					});
+				}
 
-				return suite.start(files, (testResult) => {
-					this.print.printTestComplete(testResult);
-				}).then((suite) => {
-					this.print.printSuiteComplete(suite);
-					return count++;
-				});
 			}, 0);
 		}).then((count) => {
 			this.timer.end();
@@ -204,13 +197,13 @@ export default class TestRunner {
         let withoutTestTypings: string[];
 		if (testEval) {
 			let existsTestTypings: string[] = Lazy(testEval.testResults).map((testResult) => {
-				return testResult.targetFile.dir;
+				return testResult.targetFile.containingFolderPath;
 			}).reduce((a: string[], b: string) => {
 				return a.indexOf(b) < 0 ? a.concat([b]) : a;
 			}, []);
 
 			typings = Lazy(files).map((file) => {
-				return file.dir;
+				return file.containingFolderPath;
 			}).reduce((a: string[], b: string) => {
 				return a.indexOf(b) < 0 ? a.concat([b]) : a;
 			}, []);

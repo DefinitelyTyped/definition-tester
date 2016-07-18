@@ -37,19 +37,13 @@ export default class TestSuiteBase implements ITestSuite {
 		this.queue = new TestQueue(options.concurrent);
 	}
 
-	public filterTargetFiles(files: File[]): Promise<File[]> {
-		throw new Error('please implement this method');
-	}
-
 	public start(targetFiles: File[], testCallback: (result: TestResult) => void): Promise<ITestSuite> {
 		this.timer.start();
 
-		return this.filterTargetFiles(targetFiles).then((targetFiles) => {
-			// tests get queued for multi-threading
-			return Promise.map(targetFiles, (targetFile: File) => {
-				return this.runTest(targetFile).then((result) => {
-					testCallback(result);
-				});
+		// tests get queued for multi-threading
+		return Promise.map(targetFiles, (targetFile: File) => {
+			return this.runTest(targetFile).then((result) => {
+				testCallback(result);
 			});
 		}).then(() => {
 			this.timer.end();

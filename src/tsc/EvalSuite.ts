@@ -16,10 +16,4 @@ export default class TestEval extends TestSuiteBase {
 	constructor(options: ITestOptions) {
 		super(options, 'Typing tests', 'Failed tests');
 	}
-
-	public filterTargetFiles(files: File[]): Promise<File[]> {
-		return Promise.resolve(files.filter((file) => {
-			return endTestDts.test(file.filePathWithName);
-		}));
-	}
 }

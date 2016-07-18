@@ -16,24 +16,32 @@ import {ITestOptions} from '../test/ITestOptions';
 // Track all files in the repo: map full path to File objects
 /////////////////////////////////
 export default class FileIndex {
-
 	files: File[];
 	fileMap: IFileDict;
 	refMap: IFileArrDict;
-	options: ITestOptions;
 	changed: IFileDict;
 	removed: IFileDict;
 	missing: IFileArrDict;
 
-	constructor(options: ITestOptions) {
-		this.options = options;
+	constructor(public options: ITestOptions) {	}
+
+	public findFilesByName(nameRegexp: RegExp): Promise<util.FullPath[]> {
+		return new Promise<util.FullPath[]>(resolve => {
+			const finish = () => {
+				resolve(this.files.filter(f => nameRegexp.test(f.fileNameWithExtension)).map(f => f.fullPath));
+			};
+
+			if (this.files) {
+				finish();
+			} else {
+				this.readIndex().then(finish);
+			}
+		});
 	}
 
 	private checkAcceptFile(fileName: string): boolean {
-		let ok = /\.tsx?$/.test(fileName) && /^[a-z]/i.test(fileName);
-		ok = ok && fileName.indexOf('_infrastructure/') < 0;
-		ok = ok && fileName.indexOf('node_modules/') < 0;
-		return ok;
+		return (fileName.indexOf('_infrastructure/') < 0) &&
+		       (fileName.indexOf('node_modules/') < 0);
 	}
 
 	public listIndex(): string[] {
@@ -58,15 +66,13 @@ export default class FileIndex {
 		this.fileMap[file.fullPath] = file;
 	}
 
-	public readIndex(): Promise<void> {
+	private readIndex(): Promise<void> {
 		this.fileMap = Object.create(null);
-		return util.glob('**/*.ts*(x)', {
+		return util.glob('**/*', {
 			cwd: this.options.dtPath
 		}).then((fileNames: string[]) => {
-			this.files = Lazy(fileNames).filter((fileName) => {
-				return this.checkAcceptFile(fileName);
-			}).map((fileName: string) => {
-				let file = new File(this.options.dtPath, fileName);
+			this.files = Lazy(fileNames).filter(this.checkAcceptFile).map((fileName: string) => {
+				let file = File.fromPathAndFilename(this.options.dtPath, fileName);
 				this.fileMap[file.fullPath] = file;
 				return file;
 			}).toArray();
@@ -87,7 +93,7 @@ export default class FileIndex {
 				if (!file) {
 					// TODO figure out what to do here
 					// what does it mean? deleted?
-					file = new File(this.options.dtPath, local);
+					file = File.fromFullPath(full as util.FullPath);
 					this.setFile(file);
 					this.removed[full] = file;
 				} else {
@@ -116,7 +122,10 @@ export default class FileIndex {
 		});
 	}
 
+
 	private loadReferences(files: File[]): Promise<void> {
+		throw new Error('nyi');
+		/*
 		return new Promise<void>((resolve, reject) => {
 			let queue = files.slice(0);
 			let active: File[] = [];
@@ -151,6 +160,7 @@ export default class FileIndex {
 				});
 			});
 		});
+		*/
 	}
 
 	private addToRefMap(fullPath: string, file: File): void {
@@ -162,6 +172,7 @@ export default class FileIndex {
 	}
 
 	// TODO replace with a stream?
+	/*
 	private parseFile(file: File): Promise<File> {
 		return util.readFile(file.fullPath).then((content: string) => {
 			file.references = Lazy(util.extractReferenceTags(content)).map((ref: string) => {
@@ -178,7 +189,7 @@ export default class FileIndex {
 			// return the object
 			return file;
 		});
-	}
+	}*/
 
 	public collectTargets(): Promise<File[]> {
 		return new Promise<File[]>((resolve: (result: File[]) => void) => {

@@ -1,27 +1,26 @@
 'use strict';
 
 import * as path from 'path';
+import * as util from '../util/util';
 
 export default class File {
-	baseDir: string;
-	filePathWithName: string;
-	dir: string;
-	file: string;
-	ext: string;
-	fullPath: string;
-	references: File[] = [];
+	private constructor(
+		public fullPath: util.FullPath,
+		public extension = path.extname(fullPath),
+		public fileNameWithoutExtension = path.basename(fullPath, extension),
+		public fileNameWithExtension = path.basename(fullPath),
+		public containingFolderPath = path.dirname(fullPath)) {
+	}
 
-	constructor(baseDir: string, filePathWithName: string) {
-		// why choose?
-		this.baseDir = baseDir;
-		this.filePathWithName = filePathWithName;
-		this.ext = path.extname(this.filePathWithName);
-		this.file = path.basename(this.filePathWithName, this.ext);
-		this.dir = path.dirname(this.filePathWithName);
-		this.fullPath = path.join(this.baseDir, this.dir, this.file + this.ext);
+	public static fromFullPath(fullPath: util.FullPath) {
+		return new File(fullPath);
+	}
+
+	public static fromPathAndFilename(folderPath: string, fileName: string) {
+		return File.fromFullPath(path.join(folderPath, fileName) as util.FullPath);
 	}
 
 	toString(): string {
-		return `[File ${this.filePathWithName}]`;
+		return `[File ${this.fullPath}]`;
 	}
 }
