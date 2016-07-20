@@ -70,42 +70,26 @@ export default class TestRunner {
 	}
 
 	private getTestsToRun(): Promise<util.TsConfigFullPath[]> {
-		return new Promise<util.TsConfigFullPath[]>(resolve => {
-			if (this.options.changes) {
-				this.changes.readChanges().done((changes => {
-					// Every changed file adds its parent folder to the
-					// list of things to run
-					const changedFolders: {[name: string]: boolean } = {};
-					changes.forEach(ch => {
-						changedFolders[path.dirname(ch)] = true;
-					});
-					resolve(Object.keys(changedFolders).map(s => path.join(s, 'tsconfig.json') as util.TsConfigFullPath).filter(f => fs.existsSync(f)));
-				}));
-			} else {
-				// Just go with all config files
-				resolve(this.index.findFilesByName(/^tsconfig\.json$/i) as Promise<util.TsConfigFullPath[]>);
-			}
-		});
+		if (this.options.changes) {
+			return this.changes.readChangedFolders().then(changedFolders =>
+				changedFolders.map(s => path.join(s, 'tsconfig.json') as util.TsConfigFullPath));
+		} else {
+			// Just go with all config files
+			return Promise.resolve(this.index.findFilesByName(/^tsconfig\.json$/i) as Promise<util.TsConfigFullPath[]>);
+		}
 	}
+
 	private getTsFiles(): Promise<util.FullPath[]> {
-		return new Promise<util.FullPath[]>(resolve => {
-			if (this.options.changes) {
-				this.changes.readChanges().done((changes => {
-					// Every changed file adds its parent folder to the
-					// list of things to run
-					const changedFolders: {[name: string]: boolean } = {};
-					changes.forEach(ch => {
-						changedFolders[path.dirname(ch)] = true;
-					});
-					const a: Promise<util.FullPath[]>[] = Object.keys(changedFolders).map(s => this.index.findFilesByName(/\w\.d\.ts$/));
-					const b: Promise<util.FullPath[][]> = Promise.all(a);
-					resolve(b.then(results => results.reduce((memo, results) => memo.concat(results), [])));
-				}));
-			} else {
-				// Just go with all config files
-				resolve(this.index.findFilesByName(/\w\.d\.ts$/) as Promise<util.FullPath[]>);
-			}
-		});
+		if (this.options.changes) {
+			return this.changes.readChangedFolders().then(changedFolders => {
+				const a: Promise<util.FullPath[]>[] = changedFolders.map(s => this.index.findFilesByName(/\w\.d\.ts$/));
+				const b: Promise<util.FullPath[][]> = Promise.all(a);
+				return b.then(results => results.reduce((memo, results) => memo.concat(results), []));
+			});
+		} else {
+			// Just go with all config files
+			return Promise.resolve(this.index.findFilesByName(/\w\.d\.ts$/));
+		}
 	}
 
 	public run(): Promise<boolean> {

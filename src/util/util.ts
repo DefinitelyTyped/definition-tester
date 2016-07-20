@@ -75,3 +75,16 @@ export function fixPath(str: string): string {
 		return s.toLowerCase();
 	});
 }
+
+export function filterAsync<T>(arr: T[], shouldKeep: (t: T) => Promise<boolean>): Promise<T[]> {
+	return Promise.all(arr.map(shouldKeep)).then(shouldKeeps =>
+		arr.filter((_, idx) => shouldKeeps[idx]));
+}
+
+export function unique(arr: string[]): string[] {
+	const set: { [name: string]: undefined } = {};
+	for (const value of arr) {
+		set[value] = undefined;
+	}
+	return Object.keys(set);
+}
