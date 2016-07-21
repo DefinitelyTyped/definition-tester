@@ -79,7 +79,7 @@ export default class TestRunner {
 					changes.forEach(ch => {
 						changedFolders[path.dirname(ch)] = true;
 					});
-					resolve(Object.keys(changedFolders).map(s => path.join(s, 'tsconfig.json') as util.TsConfigFullPath));
+					resolve(Object.keys(changedFolders).map(s => path.join(s, 'tsconfig.json') as util.TsConfigFullPath).filter(f => fs.existsSync(f)));
 				}));
 			} else {
 				// Just go with all config files
