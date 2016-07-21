@@ -13,7 +13,7 @@ export default class GitChanges {
 		this.dtPath = dtPath;
 	}
 
-	public readChanges(): Promise<util.FullPath[]> {
+	private readChanges(): Promise<util.FullPath[]> {
 		let dir = path.join(this.dtPath, '.git');
 
 		return util.fileExists(dir).then((exists) => {
@@ -35,5 +35,11 @@ export default class GitChanges {
 				});
 			});
 		});
+	}
+
+	public readChangedFolders(): Promise<string[]> {
+		return this.readChanges().then(changes =>
+			util.filterAsync(util.unique(changes.map(path.dirname)), folder =>
+				Promise.resolve(folder !== '.' && util.fileExists(folder))));
 	}
 }
