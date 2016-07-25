@@ -96,21 +96,10 @@ module.exports = function (grunt) {
 		var repoDir = path.join(__dirname, 'tmp');
 		fs.mkdirSync(repoDir);
 
-		var Git = require('git-wrapper');
-		var git = new Git({
-			'git-dir': path.join(repoDir, '.git')
-		});
-		var opts = {
-			depth: 20
-		};
-		var args = [
-			'https://github.com/borisyankov/DefinitelyTyped',
-			repoDir
-		];
 		console.log('cloning repos..');
-
-		git.exec('clone', opts, args, function (err, msg) {
-			console.log(msg);
+		childProcess.exec(`git clone --depth 20 https://github.com/DefinitelyTyped/DefinitelyTyped ${repoDir}`, (err, stdout, stderr) => {
+			console.log(stdout);
+			console.error(stderr);
 			if (err) {
 				done(err);
 			}
@@ -118,6 +107,7 @@ module.exports = function (grunt) {
 				run(repoDir);
 			}
 		});
+		run(repoDir);
 	});
 
 	grunt.registerTask('dev', [

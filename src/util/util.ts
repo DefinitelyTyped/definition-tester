@@ -70,15 +70,16 @@ export function readJSON(target: string): Promise<string> {
 	});
 }
 
-export function fixPath(str: string): string {
-	return str.replace(/^[a-z]:/i, (s: string) => {
-		return s.toLowerCase();
+export function filterMapAsync<T>(arr: T[], filterMap: (t: T) => Promise<T | undefined>): Promise<T[]> {
+	return Promise.all(arr.map(filterMap)).then(ts => {
+		const out: T[] = [];
+		for (const t of ts) {
+			if (t !== undefined) {
+				out.push(t);
+			}
+		}
+		return out;
 	});
-}
-
-export function filterAsync<T>(arr: T[], shouldKeep: (t: T) => Promise<boolean>): Promise<T[]> {
-	return Promise.all(arr.map(shouldKeep)).then(shouldKeeps =>
-		arr.filter((_, idx) => shouldKeeps[idx]));
 }
 
 export function unique(arr: string[]): string[] {
