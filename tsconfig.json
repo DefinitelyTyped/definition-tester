@@ -59,7 +59,6 @@
         "./typings/chalk/chalk.d.ts",
         "./typings/findup-sync/findup-sync.d.ts",
         "./typings/fixes.d.ts",
-        "./typings/git-wrapper/git-wrapper.d.ts",
         "./typings/glob/glob.d.ts",
         "./typings/lazy.js/lazy.js.d.ts",
         "./typings/minimatch/minimatch.d.ts",

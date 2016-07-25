@@ -1,12 +1,11 @@
 'use strict';
 
+import * as child_process from 'child_process';
 import * as path from 'path';
-import * as Git from 'git-wrapper';
 import * as Promise from 'bluebird';
 import * as util from './util';
 
 export default class GitChanges {
-
 	private dtPath: string;
 
 	constructor(dtPath: string) {
@@ -21,16 +20,12 @@ export default class GitChanges {
 				throw new Error('cannot locate git-dir: ' + dir);
 			}
 			return new Promise<util.FullPath[]>((resolve: (result: util.FullPath[]) => void, reject: (error: any) => void) => {
-				let args = ['--name-only HEAD~1'];
-				let opts = {};
-				let git = new Git({
-					'git-dir': dir
-				});
-				git.exec('diff', opts, args, (err: Error, msg: string) => {
+				child_process.exec('git diff --name-only HEAD~1', { cwd: this.dtPath }, (err, stdout, stderr) => {
 					if (err) {
 						reject(err);
 					} else {
-						resolve(msg.replace(/^\s+/, '').replace(/\s+$/, '').split(/\r?\n/g) as util.FullPath[]);
+						const msg = <string> <any> stdout;
+						resolve(msg.trim().split(/\r?\n/g) as util.FullPath[]);
 					}
 				});
 			});
@@ -38,8 +33,14 @@ export default class GitChanges {
 	}
 
 	public readChangedFolders(): Promise<string[]> {
-		return this.readChanges().then(changes =>
-			util.filterAsync(util.unique(changes.map(path.dirname)), folder =>
-				Promise.resolve(folder !== '.' && util.fileExists(folder))));
+		return this.readChanges().then(changes => {
+			return util.filterMapAsync(util.unique(changes.map(path.dirname)), folder => {
+				if (folder === '.') {
+					return undefined;
+				}
+				const full = path.join(this.dtPath, folder);
+				return util.fileExists(full).then(exists => exists ? full : undefined);
+			});
+		});
 	}
 }

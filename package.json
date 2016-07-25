@@ -37,7 +37,6 @@
     "bluebird": "^3.3.4",
     "definition-header": "^0.3.1",
     "findup-sync": "^0.3.0",
-    "git-wrapper": "^0.1.1",
     "glob": "^7.0.3",
     "lazy.js": "^0.4.2",
     "manticore": "^0.2.4",
