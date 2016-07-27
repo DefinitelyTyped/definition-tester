@@ -33,10 +33,10 @@ export default class Tsc {
 			util.fileExists(tscPath)
 		]).spread((tsfileExists: boolean, tscPathExists: boolean) => {
 			if (!tsfileExists) {
-				throw new Error(tsConfigfile + ' does not exist in path ' + process.cwd());
+				throw new Error(tsConfigfile + ' does not exist in path ' + tscPath);
 			}
 			if (!tscPathExists) {
-				throw new Error(tscPath + ' does not exist');
+				throw new Error(tscPath + ' does not exist in path ' + tscPath);
 			}
 			return true;
 		}).then(ok => {
