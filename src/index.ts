@@ -69,7 +69,7 @@ if (argv['debug']) {
 	Promise.longStackTraces();
 }
 
-let dtPath = util.fixPath(path.resolve(argv['path']));
+let dtPath = path.resolve(argv['path']);
 let cpuCores = os.cpus().length;
 
 if (argv.help) {
@@ -86,7 +86,7 @@ Promise.onPossiblyUnhandledRejection((reason) => {
 let testFull = (process.env['TRAVIS_BRANCH'] ? /\w\/full$/.test(process.env['TRAVIS_BRANCH']) : false);
 
 new TestRunner({
-	testerPath: util.fixPath(path.dirname(testerPkgPath)),
+	testerPath: path.dirname(testerPkgPath),
 	dtPath: dtPath,
 	concurrent: (argv['single-thread'] ? 1 : Math.round(cpuCores * .75)),
 	tscPath: argv['tsc-path'],

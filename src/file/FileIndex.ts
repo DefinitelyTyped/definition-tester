@@ -88,7 +88,7 @@ export default class FileIndex {
 			Lazy(changes).filter((full) => {
 				return this.checkAcceptFile(full);
 			}).uniq().each((local) => {
-				let full = util.fixPath(path.resolve(this.options.dtPath, local));
+				let full = path.resolve(this.options.dtPath, local);
 				let file = this.getFile(full);
 				if (!file) {
 					// TODO figure out what to do here
