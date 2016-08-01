@@ -34,7 +34,8 @@ export default class GitChanges {
 
 	public readChangedFolders(): Promise<string[]> {
 		return this.readChanges().then(changes => {
-			return util.filterMapAsync(util.unique(changes.map(path.dirname)), folder => {
+			// Only get the rootDirName, meaning we get "history" but not "history/lib".
+			return util.filterMapAsync(util.unique(changes.map(rootDirName)), folder => {
 				if (folder === '.') {
 					return undefined;
 				}
@@ -43,4 +44,10 @@ export default class GitChanges {
 			});
 		});
 	}
+}
+
+// For "a/b/c", returns "a".
+function rootDirName(fileName: util.FullPath): string {
+	const slash = fileName.indexOf('/');
+	return slash === -1 ? fileName : fileName.slice(0, slash);
 }
