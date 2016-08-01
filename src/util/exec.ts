@@ -10,14 +10,14 @@ export class ExecResult {
 	stderr = '';
 }
 
-export function exec(filename: string, cmdLineArgs: string[]): Promise<ExecResult> {
+export function exec(commandName: string, cmdLineArgs: string[], cwd?: string): Promise<ExecResult> {
 	return new Promise<ExecResult>((resolve: (result: ExecResult) => void, reject: (error: any) => void) => {
 		let result = new ExecResult();
 		result.exitCode = null;
 
-		let cmdLine = filename + ' ' + cmdLineArgs.join(' ');
+		let cmdLine = commandName + ' ' + cmdLineArgs.join(' ');
 
-		let cp = child_process.exec(cmdLine, { maxBuffer: 1 * 1024 * 1024 }, (error: ErrorCode, stdout: Buffer, stderr: Buffer) => {
+		let cp = child_process.exec(cmdLine, { cwd, maxBuffer: 1 * 1024 * 1024 }, (error: ErrorCode, stdout: Buffer, stderr: Buffer) => {
 			result.error = error;
 			result.stdout = String(stdout);
 			result.stderr = String(stderr);
