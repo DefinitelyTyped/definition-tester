@@ -46,8 +46,8 @@ export default class GitChanges {
 	}
 }
 
-// For "a/b/c", returns "a".
+// For "a/b/c", returns "a". For "a", returns ".".
 function rootDirName(fileName: util.FullPath): string {
 	const slash = fileName.indexOf('/');
-	return slash === -1 ? fileName : fileName.slice(0, slash);
+	return slash === -1 ? '.' : fileName.slice(0, slash);
 }
