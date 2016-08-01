@@ -70,6 +70,8 @@ if (argv['debug']) {
 }
 
 let dtPath = path.resolve(argv['path']);
+let tslintConfig = path.join(__dirname, '../tslint.json');
+
 let cpuCores = os.cpus().length;
 
 if (argv.help) {
@@ -90,7 +92,7 @@ new TestRunner({
 	dtPath: dtPath,
 	concurrent: (argv['single-thread'] ? 1 : Math.round(cpuCores * .75)),
 	tscPath: argv['tsc-path'],
-	tslintConfig: path.join(path.dirname(testerPkgPath), 'conf', 'tslint.json'),
+	tslintConfig: tslintConfig,
 
 	changes: (testFull ? false : argv['changes']),
 	tests: argv['dry'] ? false : argv['tests'],

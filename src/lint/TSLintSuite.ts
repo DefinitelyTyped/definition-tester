@@ -34,7 +34,7 @@ export default class TSLintSuite extends TestSuiteBase {
 		return util.readJSON(this.options.tslintConfig).then((config) => {
 			this.tslint = {
 				configuration: config,
-				formatter: path.resolve(this.options.testerPath, 'src', 'lint', 'TSLintFormatter')
+				rulesDirectory: path.join(__dirname, 'customRules')
 			};
 			return super.start(targetFiles, testCallback);
 		});
@@ -48,7 +48,7 @@ export default class TSLintSuite extends TestSuiteBase {
 			let testResult = new TestResult();
 			testResult.hostedBy = this;
 			testResult.targetFile = targetFile;
-
+			testResult.diagnostics = [];
 			if (!res) {
 				testResult.diagnostics = [`bad result for ${targetFile.fullPath}`];
 			} else if (res.failureCount > 0 && res.output) {

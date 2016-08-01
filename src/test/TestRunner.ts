@@ -155,6 +155,16 @@ export default class TestRunner {
 						});
 					});
 				}
+				else if (suite.testSuiteName === 'Linting') {
+					return this.getTsFiles().then(tsFiles => {
+						return suite.start(tsFiles.map(test => File.fromFullPath(test)), (testResult) => {
+							this.print.printTestComplete(testResult);
+						}).then((suite) => {
+							this.print.printSuiteComplete(suite);
+							return count + 1;
+						});
+					});
+				}
 				else {
 					return suite.start(files, (testResult) => {
 						this.print.printTestComplete(testResult);
@@ -163,6 +173,7 @@ export default class TestRunner {
 						return count + 1;
 					});
 				}
+
 			}, 0));
 		}).then((count) => {
 			this.timer.end();
@@ -220,7 +231,6 @@ export default class TestRunner {
 			return suite.ngTests.length !== 0;
 		})) {
 			this.print.printErrorsHeader();
-
 			this.suites.filter((suite) => {
 				return suite.ngTests.length !== 0;
 			}).forEach((suite) => {

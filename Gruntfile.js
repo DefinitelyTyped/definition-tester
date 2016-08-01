@@ -14,7 +14,8 @@ module.exports = function (grunt) {
 		pkg: grunt.file.readJSON('package.json'),
 		tslint: {
 			options: {
-				configuration: grunt.file.readJSON('tslint.json')
+				configuration: grunt.file.readJSON('tslint.json'),
+				rulesDirectory: "src/lint/customRules"
 			},
 			src: ['src/**/*.ts'],
 			test: ['test/src/**/*.ts']
