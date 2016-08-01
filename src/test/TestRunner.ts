@@ -97,7 +97,7 @@ export default class TestRunner {
 		this.timer.start();
 
 		return new Promise<boolean>(resolve => {
-			this.getTestsToRun().done(testsToRun => {
+			return this.getTestsToRun().done(testsToRun => {
 				if (this.options.printRefMap) {
 					this.print.printRefMap(this.index, this.index.refMap);
 				}
@@ -112,12 +112,12 @@ export default class TestRunner {
 				if (this.options.printFiles) {
 					this.print.printFiles(this.index.files);
 				}
-				this.runTests(testsToRun.map(test => File.fromFullPath(test))).then(() => {
+				resolve(this.runTests(testsToRun.map(test => File.fromFullPath(test))).then(() => {
 					// success yes/no?
 					return !this.suites.some((suite) => {
 						return suite.ngTests.length !== 0;
 					});
-				});
+				}));
 			});
 		});
 	}
@@ -127,7 +127,7 @@ export default class TestRunner {
 		let headers = new HeaderSuite(this.options);
 		let linter = new TSLintSuite(this.options);
 
-		return new Promise<void>(resolve => {
+		return new Promise<number>(resolve => {
 			this.print.init(files.length, files.length);
 			this.print.printHeader(this.options);
 
@@ -141,17 +141,17 @@ export default class TestRunner {
 				this.addSuite(headers);
 			}
 
-			return Promise.reduce(this.suites, (count: number, suite: ITestSuite) => {
+			resolve(Promise.reduce(this.suites, (count: number, suite: ITestSuite) => {
 				suite.testReporter = suite.testReporter || new DefaultReporter(this.print);
 
 				this.print.printSuiteHeader(suite.testSuiteName);
 				if (suite.testSuiteName === 'Header format') {
-					this.getTsFiles().done(tsFiles => {
+					return this.getTsFiles().then(tsFiles => {
 						return suite.start((tsFiles.filter(isEntryPointFile)).map(test => File.fromFullPath(test)), (testResult) => {
 							this.print.printTestComplete(testResult);
 						}).then((suite) => {
 							this.print.printSuiteComplete(suite);
-							return count++;
+							return count + 1;
 						});
 					});
 				}
@@ -160,11 +160,10 @@ export default class TestRunner {
 						this.print.printTestComplete(testResult);
 					}).then((suite) => {
 						this.print.printSuiteComplete(suite);
-						return count++;
+						return count + 1;
 					});
 				}
-
-			}, 0);
+			}, 0));
 		}).then((count) => {
 			this.timer.end();
 			this.finaliseTests(files);
