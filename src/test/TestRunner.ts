@@ -173,7 +173,6 @@ export default class TestRunner {
 						return count + 1;
 					});
 				}
-
 			}, 0));
 		}).then((count) => {
 			this.timer.end();

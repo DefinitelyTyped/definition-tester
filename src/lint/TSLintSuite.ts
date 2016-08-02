@@ -45,10 +45,7 @@ export default class TSLintSuite extends TestSuiteBase {
 			filePath: targetFile.fullPath,
 			options: this.tslint
 		}).then((res: any) => {
-			let testResult = new TestResult();
-			testResult.hostedBy = this;
-			testResult.targetFile = targetFile;
-			testResult.diagnostics = [];
+			let testResult = new TestResult(this, targetFile, []);
 			if (!res) {
 				testResult.diagnostics = [`bad result for ${targetFile.fullPath}`];
 			} else if (res.failureCount > 0 && res.output) {

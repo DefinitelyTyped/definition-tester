@@ -24,9 +24,7 @@ export default class HeaderSuite extends TestSuiteBase {
 
 	public runTest(targetFile: File): Promise<TestResult> {
 		return util.readFile(targetFile.fullPath).then((content) => {
-			let testResult = new TestResult();
-			testResult.hostedBy = this;
-			testResult.targetFile = targetFile;
+			let testResult = new TestResult(this, targetFile, []);
 
 			if (DH.isPartial(content)) {
 				testResult.diagnostics = [];
