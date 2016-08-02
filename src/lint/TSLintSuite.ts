@@ -45,12 +45,13 @@ export default class TSLintSuite extends TestSuiteBase {
 			filePath: targetFile.fullPath,
 			options: this.tslint
 		}).then((res: any) => {
-			let testResult = new TestResult(this, targetFile, []);
+			let diagnostics: string[] = [];
 			if (!res) {
-				testResult.diagnostics = [`bad result for ${targetFile.fullPath}`];
+				diagnostics = [`bad result for ${targetFile.fullPath}`];
 			} else if (res.failureCount > 0 && res.output) {
-				testResult.diagnostics = [res.output];
+				diagnostics = [res.output];
 			}
+			let testResult = new TestResult(this, targetFile, diagnostics);
 			this.testResults.push(testResult);
 
 			// convert to our promise type
