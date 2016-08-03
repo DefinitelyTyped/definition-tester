@@ -23,14 +23,7 @@ mc.registerTask(function lint(params: any, callback: (err: Error, res: any) => v
 			}
 			let linter = new Linter(params.filePath, contents, params.options);
 			let result = linter.lint();
-
-			result.output = result.output.split('\n').reduce((memo: string[], line: string) => {
-				if (line !== '') {
-					memo.push(line + '\n');
-				}
-				return memo;
-			}, []).join('');
-
+			result.failures = [];
 			callback(err, result);
 		});
 	});

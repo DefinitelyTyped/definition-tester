@@ -24,23 +24,19 @@ export default class HeaderSuite extends TestSuiteBase {
 
 	public runTest(targetFile: File): Promise<TestResult> {
 		return util.readFile(targetFile.fullPath).then((content) => {
-			let testResult = new TestResult();
-			testResult.hostedBy = this;
-			testResult.targetFile = targetFile;
-
+			let diagnostics: string[];
 			if (DH.isPartial(content)) {
-				testResult.diagnostics = [];
+				diagnostics = [];
 			} else {
 				let result = DH.parse(content);
 				if (result.success) {
-					testResult.diagnostics = [];
+					diagnostics = [];
 				} else {
-					testResult.diagnostics = ['\n', result.details];
-					console.log(`== Header error in ${targetFile.fullPath} ==`);
-					console.log(result.details);
+					diagnostics = ['\n', result.details];
 				}
 			}
 
+			let testResult = new TestResult(this, targetFile, diagnostics);
 			this.testResults.push(testResult);
 
 			return testResult;

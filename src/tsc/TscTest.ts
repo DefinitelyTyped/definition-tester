@@ -17,13 +17,7 @@ export default class TscTest implements ITest {
 	constructor(public suite: ITestSuite, public tsConfigFile: File, public options?: ITscExecOptions) { }
 
 	public run(): Promise<TestResult> {
-		return runTsc(this.tsConfigFile.fullPath, this.options).then(diagnostics => {
-			let testResult = new TestResult();
-			testResult.hostedBy = this.suite;
-			testResult.targetFile = this.tsConfigFile;
-			testResult.diagnostics = diagnostics;
-
-			return testResult;
-		});
+		return runTsc(this.tsConfigFile.fullPath, this.options).then(diagnostics =>
+			new TestResult(this.suite, this.tsConfigFile, diagnostics));
 	}
 }
