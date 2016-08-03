@@ -19,5 +19,5 @@ export default class TscTest implements ITest {
 	public run(): Promise<TestResult> {
 		return runTsc(this.tsConfigFile.fullPath, this.options).then(diagnostics =>
 			new TestResult(this.suite, this.tsConfigFile, diagnostics));
-	};
+	}
 }
