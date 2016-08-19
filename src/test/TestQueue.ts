@@ -50,6 +50,7 @@ export default class TestQueue {
 		if (this.queue.length === 0 && this.active.length === 0 && this.retries.length > 0) {
 			this.queue = this.retries;
 			this.retries = [];
+			// !!!
 			// lower the concurrency (fight out-of-memory errors)
 			this.concurrent = Math.max(1, this.concurrent / 2);
 			// check again
@@ -60,10 +61,12 @@ export default class TestQueue {
 	private step(): void {
 		let item = this.queue.pop();
 		item.attempts++;
+		this.active.push(item);
 		item.test.run().then((res) => {
 			// see if we can retry
 			if (!res.success && item.attempts < this.maxRetry) {
 				if (res.diagnostics.length && res.diagnostics.some(d => /^Killed/.test(d))) {
+					throw new Error("WTF?");
 					this.retries.push(item);
 					return;
 				}
@@ -81,6 +84,5 @@ export default class TestQueue {
 				this.check();
 			});
 		});
-		this.active.push(item);
 	}
 }

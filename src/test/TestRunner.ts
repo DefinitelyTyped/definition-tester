@@ -96,6 +96,7 @@ export default class TestRunner {
 		this.timer = new Timer();
 		this.timer.start();
 
+		// this is silly. Just return it at the end.
 		return new Promise<boolean>(resolve => {
 			return this.getTestsToRun().done(testsToRun => {
 				if (this.options.printRefMap) {
@@ -127,6 +128,7 @@ export default class TestRunner {
 		let headers = new HeaderSuite(this.options);
 		let linter = new TSLintSuite(this.options);
 
+		// silly
 		return new Promise<number>(resolve => {
 			this.print.init(files.length, files.length);
 			this.print.printHeader(this.options);

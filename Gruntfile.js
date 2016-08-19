@@ -12,14 +12,14 @@ module.exports = function (grunt) {
 
 	grunt.initConfig({
 		pkg: grunt.file.readJSON('package.json'),
-		tslint: {
+		/*tslint: {
 			options: {
 				configuration: grunt.file.readJSON('tslint.json'),
 				rulesDirectory: "src/lint/customRules"
 			},
-			src: ['src/**/*.ts'],
-			test: ['test/src/**/*.ts']
-		},
+			src: ['src/** /*.ts'],
+			test: ['test/src/** /*.ts']
+		},*/
 		clean: {
 			cruft: [
 				'tscommand-*.tmp.txt'
@@ -68,9 +68,9 @@ module.exports = function (grunt) {
 			if (options.tests) {
 				args.push('--tests');
 			}
-			if (options.lint) {
-				args.push('--lint');
-			}
+			//if (options.lint) {
+			//	args.push('--lint');
+			//}
 			if (options.changes) {
 				args.push('--changes');
 			}
@@ -131,7 +131,7 @@ module.exports = function (grunt) {
 	grunt.registerTask('compile', [
 		'prep',
 		'ts',
-		'tslint:src'
+		//'tslint:src'
 	]);
 
 	grunt.registerTask('build', [

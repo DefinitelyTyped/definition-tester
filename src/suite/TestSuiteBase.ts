@@ -34,6 +34,7 @@ export default class TestSuiteBase implements ITestSuite {
 		this.options = options;
 		this.testSuiteName = testSuiteName;
 		this.errorHeadline = errorHeadline;
+		console.log(options.concurrent);
 		this.queue = new TestQueue(options.concurrent);
 	}
 
@@ -52,6 +53,9 @@ export default class TestSuiteBase implements ITestSuite {
 	}
 
 	public runTest(targetFile: File): Promise<TestResult> {
+		// require('heapdump').writeSnapshot('/var/local/' + Date.now() + '.heapsnapshot');
+		// console.log(process.memoryUsage());
+
 		return this.queue.run(new TscTest(this, targetFile, {
 			tscPath: this.options.tscPath
 		})).then((result) => {

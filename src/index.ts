@@ -90,7 +90,7 @@ let testFull = (process.env['TRAVIS_BRANCH'] ? /\w\/full$/.test(process.env['TRA
 new TestRunner({
 	testerPath: path.dirname(testerPkgPath),
 	dtPath: dtPath,
-	concurrent: (argv['single-thread'] ? 1 : Math.round(cpuCores * .75)),
+	concurrent: 1, // (argv['single-thread'] ? 1 : Math.round(cpuCores * .75)),
 	tscPath: argv['tsc-path'],
 	tslintConfig: tslintConfig,
 
