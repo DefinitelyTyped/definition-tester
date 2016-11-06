@@ -71,7 +71,7 @@ let dtPath = util.fixPath(path.resolve(argv['path']));
 let cpuCores = os.cpus().length;
 
 if (argv.help) {
-	optimist.help();
+	console.log(optimist.help());
 	process.exit(0);
 }
 
